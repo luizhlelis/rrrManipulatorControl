@@ -1,0 +1,44 @@
+clc;
+clear all;
+close all;
+
+% ---------------------- DENAVIT - HATENBERG ------------------------
+
+% Rodar o Matlab com um usuário com alto privilegio
+
+% Carregando a matriz de Denavit-Hatenberg
+mat = load('matrix/DH.mat','-mat');
+dh = mat.dh
+
+dh_representation = SerialLink(dh)
+
+% Carregando angulos iniciais das juntas (radianos)
+theta_0 = 0;
+theta_1 = 0;
+theta_2 = 0;
+q = [theta_0, theta_1, theta_2]
+
+% Representacao grafica do manipulador
+dh_representation.plot(q)
+dh_representation.teach
+
+% Matrizes homogeneas
+aplpha_0 = -pi/2;
+aplpha_1 = 0;
+aplpha_2 = 0;
+
+a0 = 0.065
+a1 = 0.172
+a2 = 0.235
+
+a0 = 0.065
+a1 = 0.172
+a2 = 0.235
+
+
+A_0 =
+    [
+        [cos(theta_0)   -sin(theta_0)*cos(alpha_0)  sin(theta_0)*sin(alpha_0)   a0*cos(theta_0)];
+        [sin(theta_0)   cos(theta_0)*cos(alpha_0)   -cos(theta_0)*sin(alpha_0)  a0*sin(theta_0)];
+        [0              sin(alpha_0)                -cos(alpha_0)               d0             ];
+    ]
