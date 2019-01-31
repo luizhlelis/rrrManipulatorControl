@@ -127,11 +127,11 @@ class Crustcrawler:
 		#########################################################################
 		# cria controladores de juntas
 		#########################################################################
-#		self.BaseCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-#		self.ShoulderCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-#		self.ForearmCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-#		self.WristCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-#		self.GripCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.BaseCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.ShoulderCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.ForearmCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.WristCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.GripCtrl = ctrl.Controller(KPGAIN, KDGAIN)
 		
 		#########################################################################
 		# variaveis de entrada e saida
@@ -211,7 +211,8 @@ class Crustcrawler:
 		med_grip = (MAX_LIMIT_GRIP + MIN_LIMIT_GRIP)/2.0
 
 		# seta referencia de controle para o meio
-		self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0), (med_wrist, 0), (med_grip, 0)])
+		#self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0), (med_wrist, 0), (med_grip, 0)])
+		self.set(self.get())
 	
 	#########################################################################
 	# le as informacoes de todas as juntas
@@ -252,8 +253,8 @@ class Crustcrawler:
 		
 			# escreve todo mundo
 			self.mutex.acquire()
-			if not self.ismaster:
-				self.write_all()
+			#if not self.ismaster:
+			self.write_all()
 			self.mutex.release()
 				
 	#########################################################################
@@ -319,7 +320,7 @@ class Crustcrawler:
 		# limitacao angular de colisao
 		angle_ref = max(angle_ref, MIN_LIMIT_BASE)
 		angle_ref = min(angle_ref, MAX_LIMIT_BASE)
-		self.setJoint(BASE_AXIS_ID, angle_ref, 300)
+		self.setJoint(BASE_AXIS_ID, angle_ref, self.ref[0][1])
 		
 	#########################################################################
 	# read shoulder axis

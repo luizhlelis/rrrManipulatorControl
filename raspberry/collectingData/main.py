@@ -31,6 +31,8 @@ qInput = list()
 qOutput = list()
 #qslave = list()
 
+masterdata = master.get()
+
 ############################################################
 # main loop
 ############################################################
@@ -40,18 +42,21 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	########################
 	# escrita dos dados
 	########################
+
+	#print master.getBase()
+
 	if time.time() - comecou <= 10.0:
-		master.setBase(50)
-		inputData = 50
+		inputData = 290
 	else:
-		master.setBase(250)
-		inputData = 250
+		inputData = 200
+
+	masterdata[0] = (inputData, 512)
+	master.set(masterdata)
 
 	########################
 	# leitura dos dados
 	########################
 	outputData = master.getBase()
-	outputFile.write(str(time.time()) + ',' + str(outputData) + '\n')
 	
 	########################
 	# seta referencia de controle para as juntas
@@ -71,8 +76,10 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	# a, v = inputData[LOGID]
 	qInput.append(inputData)
 	#
-	#a, v = outputData[LOGID]
-	qOutput.append(outputData)
+	a = outputData[0]
+	qOutput.append(a)
+
+	outputFile.write(str(tNow) + ',' + str(a) + '\n')
 
 	time.sleep(.01)
 

@@ -38,9 +38,8 @@ class Controller:
 		
 		# calcula lei de controle
 		r = self.reference
-		# erro = r - y
-		# torque = self.Kp*erro + self.Kd*dy
-		torque = self.reference
+		erro = r - y
+		torque = self.Kp*erro + self.Kd*dy
 
 		torque = round(torque)
 		torque = abs(int(torque))
