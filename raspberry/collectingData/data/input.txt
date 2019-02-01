@@ -1,0 +1,7 @@
+inputs (10s - degrau no 5°s):
+
+velo: 512
+
+base: 290 -> 200
+shoulder: 40 -> 80 (20s - degrau 10ºs - velo: 250)
+forearm: 32 -> 100 (20s - degrau 10ºs - velo: 250)

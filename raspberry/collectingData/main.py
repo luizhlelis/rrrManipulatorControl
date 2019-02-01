@@ -39,10 +39,7 @@ masterdata = master.get()
 print "---------------------------------\nControl begin..."
 comecou = time.time()
 while time.time() - comecou <= 20.0: # tempo de simulacao
-	########################
-	# escrita dos dados
-	########################
-
+	
 	#print master.getBase()
 
 	if time.time() - comecou <= 10.0:
@@ -50,32 +47,17 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	else:
 		inputData = 200
 
-	masterdata[0] = (inputData, 512)
+	masterdata[0] = (inputData, 250)
 	master.set(masterdata)
 
-	########################
-	# leitura dos dados
-	########################
 	outputData = master.getBase()
-	
-	########################
-	# seta referencia de controle para as juntas
-	########################
-	#master.set(slavedata)
-	#slave.set(masterdata)
-	
-	########################
-	# log
-	########################
+
 	LOGID = 0
 	tNow = time.time().real - comecou
 	
-	# dados para plot
+
 	tempo.append(tNow)
-	#
-	# a, v = inputData[LOGID]
 	qInput.append(inputData)
-	#
 	a = outputData[0]
 	qOutput.append(a)
 

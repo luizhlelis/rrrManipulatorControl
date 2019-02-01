@@ -204,15 +204,15 @@ class Crustcrawler:
 	#########################################################################
 	def initJoints(self):
 		# pega valores medios das juntas
-		med_base = (MAX_LIMIT_BASE + MIN_LIMIT_BASE)/2.0
-		med_shoulder = (MAX_LIMIT_SHOULDER + MIN_LIMIT_SHOULDER)/2.0
-		med_forearm = (MAX_LIMIT_FOREARM + MIN_LIMIT_FOREARM)/2.0
-		med_wrist = (MAX_LIMIT_WRIST + MIN_LIMIT_WRIST)/2.0
-		med_grip = (MAX_LIMIT_GRIP + MIN_LIMIT_GRIP)/2.0
+		med_base = self.getBase()[0]
+		med_shoulder = self.getShoulder()[0]
+		med_forearm = self.getForearm()[0]
+		med_wrist = self.getWrist()[0]
+		med_grip = self.getGrip()[0]
 
 		# seta referencia de controle para o meio
-		#self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0), (med_wrist, 0), (med_grip, 0)])
-		self.set(self.get())
+		self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0), (med_wrist, 0), (med_grip, 0)])
+		#self.set(self.get())
 	
 	#########################################################################
 	# le as informacoes de todas as juntas
