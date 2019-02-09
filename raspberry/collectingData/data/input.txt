@@ -1,6 +1,4 @@
-inputs (10s - degrau no 5°s):
-
-velo: 512
+(20s - degrau 10ºs - velo: 350):
 
 base: 290 -> 200
 shoulder: 40 -> 80 (20s - degrau 10ºs - velo: 250)

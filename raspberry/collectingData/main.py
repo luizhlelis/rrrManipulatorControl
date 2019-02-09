@@ -22,7 +22,7 @@ master = cc.Crustcrawler(MASTER_PORT, True)
 # create slave robot
 #slave = cc.Crustcrawler(SLAVE_PORT, False)
 # esperando robos irem para a posicao inicial
-outputFile = open('data/base/output.txt', 'w')
+outputFile = open('data/base/output_0001s.txt', 'w')
 time.sleep(3)
 
 # variaveis de plot
@@ -47,7 +47,7 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	else:
 		inputData = 200
 
-	masterdata[0] = (inputData, 250)
+	masterdata[0] = (inputData, 350)
 	master.set(masterdata)
 
 	outputData = master.getBase()
@@ -63,7 +63,7 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 
 	outputFile.write(str(tNow) + ',' + str(a) + '\n')
 
-	time.sleep(.01)
+	time.sleep(.0001)
 
 ############################################################
 # destruindo objetos

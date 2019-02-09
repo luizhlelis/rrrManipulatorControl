@@ -337,26 +337,14 @@ class Crustcrawler:
 	# write shoulder axis
 	#########################################################################
 	def setShoulder(self, angle_ref):
-	
+
 		# limitacao angular de colisao
 		angle_ref = max(angle_ref, MIN_LIMIT_SHOULDER)
 		angle_ref = min(angle_ref, MAX_LIMIT_SHOULDER)
 		
-		# seta a referencia do controlador
-		self.ShoulderCtrl.setReference(angle_ref)
-		
-		# medindo posicao e velocidade correntes
-		angle, speed = self.getShoulder()
-		
-		# calcula o torque
-		torque, goal_pos = self.ShoulderCtrl.getU(angle, speed)
-		
-		# compensacao de torque gravitacional
-		torque = torque + abs(self.Gq_shoulder)
-		
 		# seta posicao do servo do ombro
-		self.setJoint(SHOULDER_A_AXIS_ID, goal_pos, torque)
-		self.setJoint(SHOULDER_B_AXIS_ID, goal_pos, torque)
+		self.setJoint(SHOULDER_A_AXIS_ID, angle_ref, self.ref[1][1])
+		self.setJoint(SHOULDER_B_AXIS_ID, angle_ref, self.ref[1][1])
 	
 	#########################################################################
 	# read forearm axis
@@ -378,21 +366,9 @@ class Crustcrawler:
 		angle_ref = max(angle_ref, MIN_LIMIT_FOREARM)
 		angle_ref = min(angle_ref, MAX_LIMIT_FOREARM)
 		
-		# seta a referencia do controlador
-		self.ForearmCtrl.setReference(angle_ref)
-		
-		# medindo posicao e velocidade correntes
-		angle, speed = self.getForearm()
-		
-		# calcula o torque
-		torque, goal_pos = self.ForearmCtrl.getU(angle, speed)
-		
-		# compensacao de torque gravitacional
-		#torque = torque + abs(self.Gq_forearm)
-		
 		# seta posicao do servo do antebraco
-		self.setJoint(FOREARM_A_AXIS_ID, goal_pos, torque)
-		self.setJoint(FOREARM_B_AXIS_ID, goal_pos, torque)
+		self.setJoint(FOREARM_A_AXIS_ID, angle_ref, self.ref[2][1])
+		self.setJoint(FOREARM_B_AXIS_ID, angle_ref, self.ref[2][1])
 	   
 	#########################################################################
 	# read wrist axis
