@@ -1,0 +1,4 @@
+%Data: Wed Jan 30 17:41:36 2019
+%Control gains:
+%	(KP, KD): (8.0,-1.0)
+
