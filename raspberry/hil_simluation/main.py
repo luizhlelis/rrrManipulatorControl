@@ -12,14 +12,11 @@ os.nice(19)
 
 ############################################################
 # definicoes globais
-MASTER_PORT = "/dev/ttyUSB0"
-SLAVE_PORT	 = "/dev/ttyUSB1"
+SERIAL_PORT = "/dev/ttyUSB0"
 
 ############################################################
 # create master robot
-master = cc.Crustcrawler(MASTER_PORT, True)
-# create slave robot
-#slave = cc.Crustcrawler(SLAVE_PORT, False)
+master = cc.Crustcrawler(SERIAL_PORT)
 # esperando robos irem para a posicao inicial
 outputFile = open('data/base/output_0001s.txt', 'w')
 time.sleep(3)
@@ -28,7 +25,6 @@ time.sleep(3)
 tempo = list()
 qInput = list()
 qOutput = list()
-#qslave = list()
 
 masterdata = master.get()
 
@@ -62,14 +58,13 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 
 	outputFile.write(str(tNow) + ',' + str(a) + '\n')
 
-	time.sleep(.0001)
+	time.sleep(.01)
 
 ############################################################
 # destruindo objetos
 outputFile.close()
 print "Destruindo objetos..."
 del master
-#del slave
 
 ############################################################
 # plota resultados

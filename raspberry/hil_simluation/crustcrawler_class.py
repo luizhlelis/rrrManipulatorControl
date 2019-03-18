@@ -2,7 +2,8 @@
 # Programa de controle dos manipuladores
 # Nome: Luiz Henrique Silva Lelis
 #############################################################################
-import dynamixel
+import time
+import serial
 import control_class as ctrl
 import os, time, math
 import threading
@@ -81,47 +82,20 @@ class Crustcrawler:
 	#########################################################################
 	# construtor
 	#########################################################################
-	def __init__(self, portName, ismaster=True):
+	def __init__(self, portName):
 		
 		#########################################################################
-		# Comunicacao com o robo
+		# Comunicacao serial
 		#########################################################################
-		# Establish a serial connection to the dynamixel network (requires a USB2Dynamixel)
-		self.serial = dynamixel.SerialStream(port=portName, baudrate=BAUDRATE, timeout=1)
-		self.net = dynamixel.DynamixelNetwork(self.serial)
-	
-		# Ping the range of servos that are attached
-		#print "Scanning for Dynamixels..."
-		self.net.scan(1, HIGHESTSERVOID)
-		
-		# cria atuadores da rede
-		self.Actuators = []
-		self.Actuators.append([]) # atuador ZERO (nunca sera usado)
-		for dyn in self.net.get_dynamixels():
-			#print dyn.id
-			self.Actuators.append(self.net[dyn.id])
-			
-		# verifica se os atuadores foram criados
-		if not self.Actuators:
-			print 'No Dynamixels Found!'
-			sys.exit(0)
-		
-		#########################################################################	
-		# inicializacao dos atuadores
-		#########################################################################
-		for id in range(1, len(self.Actuators)):
-			self.Actuators[id].stop()
-			self.Actuators[id].ccw_compliance_margin = self.Actuators[id].cw_compliance_margin = 0
-			self.Actuators[id].ccw_compliance_slope = self.Actuators[id].cw_compliance_slope = 1
-			self.Actuators[id].punch = 8
-			self.Actuators[id].moving_speed = abs(A12_MAX_ROTATION)
-			self.Actuators[id].synchronized = True
-			self.Actuators[id].torque_enable = False
-			self.Actuators[id].torque_limit = 0
-			self.Actuators[id].max_torque = A12_MAX_TORQUEBIN
-			
-		# envia informacoes aos servos
-		self.update()
+		# Establish a serial connection
+		self.serial = serial.Serial(
+			port = portName,
+			baudrate = BAUDRATE,
+			parity = serial.PARITY_NONE,
+			stopbits = serial.STOPBITS_ONE,
+			bytesize = serial.EIGHTBITS,
+			timeout=1
+		)
 		
 		#########################################################################
 		# cria controladores de juntas
@@ -129,8 +103,6 @@ class Crustcrawler:
 		self.BaseCtrl = ctrl.Controller(KPGAIN, KDGAIN)
 		self.ShoulderCtrl = ctrl.Controller(KPGAIN, KDGAIN)
 		self.ForearmCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-		self.WristCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-		self.GripCtrl = ctrl.Controller(KPGAIN, KDGAIN)
 		
 		#########################################################################
 		# variaveis de entrada e saida
@@ -139,18 +111,10 @@ class Crustcrawler:
 		self.angles.append([])
 		self.speeds = []
 		self.speeds.append([])
-		for id in range(1, len(self.Actuators)):
-			# le as informacoes de controle
-			self.angles.append(self.Actuators[id].current_position)
-			self.speeds.append(self.Actuators[id].current_speed)
-			
 		self.goals = []
 		self.goals.append([])
 		self.torques = []
 		self.torques.append([])
-		for dyn in self.net.get_dynamixels():
-			self.goals.append(0.0)
-			self.torques.append(0.0)
 		
 		#########################################################################
 		# dispara thread principal de controle
@@ -176,42 +140,31 @@ class Crustcrawler:
 		#########################################################################
 		# Criando arquivo para salvar dados
 		#########################################################################
-		if ismaster:	
-			self.logfile = open('logs/' + time.ctime() + '_master.txt', 'w')
-		else:
-			self.logfile = open('logs/' + time.ctime() + '_slave.txt', 'w')
+		self.logfile = open('logs/' + time.ctime() + '_serial.txt', 'w')
+
 		# cabecalho
 		self.logfile.write('%Data: ' + time.ctime() + '\n')
 		self.logfile.write('%Control gains:\n')
-		self.logfile.write('%\t(KP, KD): (' + str(KPGAIN) + ',' + str(KDGAIN) + ')\n')
+		self.logfile.write('%\t(KP, KI): (' + str(KPGAIN) + ',' + str(KDGAIN) + ')\n')
 		self.logfile.write('\n')
 		
 		#########################################################################
 		# informa condicao de criacao
 		#########################################################################
 		print "---------------------------------"
-		if ismaster:
-			print "Master is ready!"
-		else:
-			print "Slave is ready!"
-		print "---------------------------------"
-		
-		self.ismaster = ismaster
+		print "Connection is ready!"
 	
 	#########################################################################
 	# initalize joint positions
 	#########################################################################
 	def initJoints(self):
 		# pega valores medios das juntas
-		med_base = self.getBase()[0]
-		med_shoulder = self.getShoulder()[0]
-		med_forearm = self.getForearm()[0]
-		med_wrist = self.getWrist()[0]
-		med_grip = self.getGrip()[0]
+		med_base = 0
+		med_shoulder = 0
+		med_forearm = 0
 
 		# seta referencia de controle para o meio
-		self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0), (med_wrist, 0), (med_grip, 0)])
-		#self.set(self.get())
+		self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0)])
 	
 	#########################################################################
 	# le as informacoes de todas as juntas

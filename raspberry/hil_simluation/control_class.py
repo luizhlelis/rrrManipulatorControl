@@ -17,10 +17,10 @@ class Controller:
 	#########################################################################
 	# construtor
 	#########################################################################
-	def __init__(self, Pgain, Dgain):
+	def __init__(self, Pgain, Igain):
 		self.reference = 0.0
 		self.Kp = Pgain
-		self.Kd = Dgain
+		self.Ki = Igain
 		self.torque_limit = 0
 		self.goal_position = 0
 	
@@ -33,12 +33,12 @@ class Controller:
 	#########################################################################
 	# calcula acao de controle
 	#########################################################################
-	def getU(self, y, dy):
+	def getU(self, y, u_delay, e_delay):
 		
 		# calcula lei de controle
 		r = self.reference
-		erro = r - y
-		torque = self.Kp*erro + self.Kd*dy
+		error = r - y
+		torque = u_delay + self.Kp*error - self.Ki*e_delay
 
 		torque = round(torque)
 		torque = abs(int(torque))
