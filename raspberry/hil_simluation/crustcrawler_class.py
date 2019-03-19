@@ -72,8 +72,12 @@ TORQUE_CONV_RATIO   = A12_MAX_TORQUE/A12_MAX_TORQUEBIN
 
 #########
 # ganhos de controle
-KPGAIN = 8.0
-KDGAIN = -1.0
+KP_GAIN_BASE = 8.0
+KI_GAIN_BASE = -1.0
+KP_GAIN_SHOULDER = 8.0
+KI_GAIN_SHOULDER = -1.0
+KP_GAIN_FOREARM = 8.0
+KI_GAIN_FOREARM = -1.0
 
 #############################################################################
 # classe para controle do manipulador
@@ -100,9 +104,9 @@ class Crustcrawler:
 		#########################################################################
 		# cria controladores de juntas
 		#########################################################################
-		self.BaseCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-		self.ShoulderCtrl = ctrl.Controller(KPGAIN, KDGAIN)
-		self.ForearmCtrl = ctrl.Controller(KPGAIN, KDGAIN)
+		self.BaseCtrl = ctrl.Controller(KP_GAIN_BASE, KI_GAIN_BASE)
+		self.ShoulderCtrl = ctrl.Controller(KP_GAIN_SHOULDER, KI_GAIN_SHOULDER)
+		self.ForearmCtrl = ctrl.Controller(KP_GAIN_FOREARM, KI_GAIN_FOREARM)
 		
 		#########################################################################
 		# variaveis de entrada e saida
@@ -144,8 +148,12 @@ class Crustcrawler:
 
 		# cabecalho
 		self.logfile.write('%Data: ' + time.ctime() + '\n')
-		self.logfile.write('%Control gains:\n')
-		self.logfile.write('%\t(KP, KI): (' + str(KPGAIN) + ',' + str(KDGAIN) + ')\n')
+		self.logfile.write('%Control gains - Base:\n')
+		self.logfile.write('%\t(KP, KI): (' + str(KP_GAIN_BASE) + ',' + str(KI_GAIN_BASE) + ')\n')
+		self.logfile.write('%Control gains - Shoulder:\n')
+		self.logfile.write('%\t(KP, KI): (' + str(KP_GAIN_SHOULDER) + ',' + str(KI_GAIN_SHOULDER) + ')\n')
+		self.logfile.write('%Control gains - Forearm:\n')
+		self.logfile.write('%\t(KP, KI): (' + str(KP_GAIN_FOREARM) + ',' + str(KI_GAIN_FOREARM) + ')\n')
 		self.logfile.write('\n')
 		
 		#########################################################################
