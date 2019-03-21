@@ -1,74 +1,146 @@
-#!/usr/bin/env python
 #############################################################################
-# Programa de controle dos manipuladores
+# HIL - Fase 2 Validando o controle do Hardware na planta simulada
+# Planta Simulada
 # Nome: Luiz Henrique Silva Lelis
 #############################################################################
-import crustcrawler_class as cc
 import os, time, random
 import matplotlib.pyplot as plt
+import serial
 
 # maximum priority
 os.nice(19)
 
 ############################################################
 # definicoes globais
-SERIAL_PORT = "/dev/ttyUSB0"
+ser = serial.Serial(
+ port='/dev/ttyUSB0',
+ baudrate = 9600,
+ parity=serial.PARITY_NONE,
+ stopbits=serial.STOPBITS_ONE,
+ bytesize=serial.EIGHTBITS,
+ timeout=1
+)
 
-############################################################
-# create master robot
-master = cc.Crustcrawler(SERIAL_PORT)
-# esperando robos irem para a posicao inicial
-outputFile = open('data/base/output_0001s.txt', 'w')
+print(ser.name)
+
+outputFileBaseControl 		= open('data/control/outputBase.txt', 'w')
+outputFileShoulderControl 	= open('data/control/outputShoulder.txt', 'w')
+outputFileForearmControl 	= open('data/control/outputForearm.txt', 'w')
+
+outputFileBase 		= open('data/output/outputBase.txt', 'w')
+outputFileShoulder 	= open('data/output/outputShoulder.txt', 'w')
+outputFileForearm 	= open('data/output/outputForearm.txt', 'w')
+
 time.sleep(3)
 
 # variaveis de plot
-tempo = list()
-qInput = list()
-qOutput = list()
+x_axis_List			= list()
+r_k_Input_Base		= list()
+r_k_Input_Shoulder	= list()
+r_k_Input_Forearm	= list()
+y_k_Output_Base		= list()
+y_k_Output_Shoulder	= list()
+y_k_Output_Forearm	= list()
 
-masterdata = master.get()
+r_k = []
+y_k = []
+e_k = []
+u_k = []
+y_k_delay = []
+u_k_delay = []
+
+# Condicaoes Iniciais [base, shoulder, forearm]
+r_k = [290, 40, 32]
+y_k = [290, 40, 32]
+e_k = [0, 0, 0]
+u_k = [0, 0, 0]
 
 ############################################################
 # main loop
 ############################################################
 print "---------------------------------\nControl begin..."
-comecou = time.time()
-while time.time() - comecou <= 20.0: # tempo de simulacao
-	
-	#print master.getBase()
 
-	if time.time() - comecou <= 10.0:
-		inputData = 290
+idx = 0
+
+while idx <= 2000: # tempo de simulacao
+
+	# Construindo a referencia r(k)
+	if idx <= 1000:
+		r_k = [290, 40, 32]
 	else:
-		inputData = 200
+		r_k = [200, 80, 100]
 
-	masterdata[0] = (inputData, 350)
-	master.set(masterdata)
+	e_k[0] = r_k[0] - y_k[0]
+	e_k[1] = r_k[1] - y_k[1]
+	e_k[2] = r_k[2] - y_k[2]
 
-	outputData = master.getBase()
+	ser.write(e_k)
+	time.sleep(0.01)
+	u_k = ser.readline()
 
-	LOGID = 0
-	tNow = time.time().real - comecou
-	
+	# BASE - Funcao de transferência da planta
+	y_k[0] = 0.01*u_k_delay[0] + 0.09*y_k_delay[0]
 
-	tempo.append(tNow)
-	qInput.append(inputData)
-	a = outputData[0]
-	qOutput.append(a)
+	# SHOULDER - Funcao de transferência da planta
+	y_k[1] = 1.583*u_k_delay[1] - 1.596*y_k_delay[1]
 
-	outputFile.write(str(tNow) + ',' + str(a) + '\n')
+	# FOREARM - Funcao de transferência da planta
+	y_k[2] = 0.9556*u_k_delay[2] - 0.9407*y_k_delay[2]
 
-	time.sleep(.01)
+	x_axis_List.append(idx)
+
+	r_k_Input_Base.append(r_k[0])
+	y_k_Output_Base.append(y_k[0])
+
+	r_k_Input_Shoulder.append(r_k[0])
+	y_k_Output_Shoulder.append(y_k[0])
+
+	r_k_Input_Forearm.append(r_k[0])
+	y_k_Output_Forearm.append(y_k[0])
+
+	# Arquivo de saida acao de controle
+	outputFileBase.write(str(idx) + ',' + str(y_k[0]) '\n')
+	outputFileShoulder.write(str(idx) + ',' + str(y_k[0]) '\n')
+	outputFileForearm.write(str(idx) + ',' + str(y_k[0]) '\n')
+
+	# Arquivo de saida y(k)
+	outputFileBaseControl.write(str(idx) + ',' + str(u_k[0]) '\n')
+	outputFileShoulderControl.write(str(idx) + ',' + str(u_k[0]) '\n')
+	outputFileForearmControl.write(str(idx) + ',' + str(u_k[0]) '\n')
+
+	# Pegando os valores da iteracao anterior
+	y_k_delay = y_k
+	u_k_delay = u_k
+
+	idx++
 
 ############################################################
 # destruindo objetos
-outputFile.close()
+outputFileBase.close()
+outputFileBaseControl.close()
+outputFileShoulderControl.close()
+outputFileForearmControl.close()
+outputFileBase.close()
+outputFileShoulder.close()
+outputFileForearm.close()
+
 print "Destruindo objetos..."
-del master
 
 ############################################################
 # plota resultados
-plt.plot(tempo, qInput, 'r.-', label='input')
-plt.plot(tempo, qOutput, 'b.-', label='output')
+plt.figure(1)
+plt.plot(x_axis_List, r_k_Input_Base, 'r.-', label='referencia')
+plt.plot(x_axis_List, y_k_Output_Base, 'b.-', label='saida')
 plt.legend()
+
+plt.figure(2)
+plt.plot(x_axis_List, r_k_Input_Shoulder, 'r.-', label='referencia')
+plt.plot(x_axis_List, y_k_Output_Shoulder, 'b.-', label='saida')
+plt.legend()
+
+plt.figure(3)
+plt.plot(x_axis_List, r_k_Input_Forearm, 'r.-', label='referencia')
+plt.plot(x_axis_List, y_k_Output_Forearm, 'b.-', label='saida')
+plt.legend()
+
 plt.show()
