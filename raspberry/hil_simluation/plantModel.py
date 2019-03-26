@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #############################################################################
 # HIL - Fase 2 Validando o controle do Hardware na planta simulada
 # Planta Simulada
@@ -53,12 +54,12 @@ u_k_delay = []
 r_k = [290, 40, 32]
 y_k = [290, 40, 32]
 e_k = [0, 0, 0]
-u_k = [0, 0, 0]
+u_k = ""
 
 ############################################################
 # main loop
 ############################################################
-print "---------------------------------\nControl begin..."
+print "---------------------------------\nIniciando a planta simulada..."
 
 idx = 0
 
@@ -74,9 +75,27 @@ while idx <= 2000: # tempo de simulacao
 	e_k[1] = r_k[1] - y_k[1]
 	e_k[2] = r_k[2] - y_k[2]
 
+	e_k = ','.join(str(aux) for aux in e_k)
+
+	print e_k
+
 	ser.write(e_k)
-	time.sleep(0.01)
-	u_k = ser.readline()
+
+	while u_k=="":
+		u_k = ser.readline()
+
+	print "Valor Lido:"
+
+	print u_k
+
+	u_k = u_k.split(',')
+
+	idx2 = 0
+	for charac in u_k:
+		u_k[idx2] = int(charac)
+		idx2+=1
+
+	print u_k
 
 	# BASE - Funcao de transferência da planta
 	y_k[0] = 0.01*u_k_delay[0] + 0.09*y_k_delay[0]
@@ -99,20 +118,20 @@ while idx <= 2000: # tempo de simulacao
 	y_k_Output_Forearm.append(y_k[0])
 
 	# Arquivo de saida acao de controle
-	outputFileBase.write(str(idx) + ',' + str(y_k[0]) '\n')
-	outputFileShoulder.write(str(idx) + ',' + str(y_k[0]) '\n')
-	outputFileForearm.write(str(idx) + ',' + str(y_k[0]) '\n')
+	outputFileBase.write(str(idx) + ',' + str(y_k[0]) + '\n')
+	outputFileShoulder.write(str(idx) + ',' + str(y_k[0]) + '\n')
+	outputFileForearm.write(str(idx) + ',' + str(y_k[0]) + '\n')
 
 	# Arquivo de saida y(k)
-	outputFileBaseControl.write(str(idx) + ',' + str(u_k[0]) '\n')
-	outputFileShoulderControl.write(str(idx) + ',' + str(u_k[0]) '\n')
-	outputFileForearmControl.write(str(idx) + ',' + str(u_k[0]) '\n')
+	outputFileBaseControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
+	outputFileShoulderControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
+	outputFileForearmControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
 
 	# Pegando os valores da iteracao anterior
 	y_k_delay = y_k
 	u_k_delay = u_k
 
-	idx++
+	idx+=1
 
 ############################################################
 # destruindo objetos
@@ -124,7 +143,7 @@ outputFileBase.close()
 outputFileShoulder.close()
 outputFileForearm.close()
 
-print "Destruindo objetos..."
+print "Finalizando..."
 
 ############################################################
 # plota resultados
