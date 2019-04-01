@@ -23,11 +23,13 @@ ser = serial.Serial(
 
 print(ser.name)
 
-e_k_delay = []
-u_k_delay = []
+e_k_delay = [0, 0, 0]
+u_k_delay = [0, 0, 0]
 
 # Condicaoes Iniciais [base, shoulder, forearm]
-e_k = ""
+e_k_string = ""
+u_k_string = ""
+e_k = list()
 u_k = [0, 0, 0]
 u_k_delay = [0, 0, 0]
 e_k_delay = [0, 0, 0]
@@ -39,19 +41,22 @@ print "---------------------------------\nControl begin..."
 
 idx = 0
 
-while idx <= 2000: # tempo de simulacao
+while idx <= 200: # tempo de simulacao
 
-	while e_k=="":
-		e_k = ser.readline()
+	while e_k_string=="":
+		e_k_string = ser.readline()
+
+	print "Iteracao: " + str(idx)
 
 	print "Valor Lido:"
 
-	e_k = e_k.split(',')
+	# Tratando quando os dados sao recebidos como string
+	if type(e_k_string) is str:
+		e_k_string = e_k_string.split(',')
 
-	idx2 = 0
-	for charac in e_k:
-		e_k[idx2] = int(charac)
-		idx2+=1
+	if (type(e_k_string[0]) is str) or (type(e_k_string[1]) is str) or (type(e_k_string[2]) is str):
+		for charac in e_k_string:
+			e_k.append(float(charac))
 
 	print e_k
 
@@ -68,9 +73,18 @@ while idx <= 2000: # tempo de simulacao
 	e_k_delay = e_k
 	u_k_delay = u_k
 
-	u_k = ','.join(str(aux) for aux in u_k)
+	u_k_string = ','.join(str(aux) for aux in u_k)
 
-	ser.write(u_k)
+	print "Valor Escrito:"
+	print u_k_string
+
+	ser.write(u_k_string)
+
+	# Reinicializando os valores atuais
+	e_k = list()
+	u_k = [0, 0, 0]
+	u_k_string = ""
+	e_k_string = ""
 
 	idx+=1
 

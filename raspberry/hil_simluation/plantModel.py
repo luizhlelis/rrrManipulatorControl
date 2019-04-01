@@ -43,30 +43,30 @@ y_k_Output_Base		= list()
 y_k_Output_Shoulder	= list()
 y_k_Output_Forearm	= list()
 
-r_k = []
-y_k = []
-e_k = []
-u_k = []
-y_k_delay = []
-u_k_delay = []
+u_k = list()
+y_k_delay = [0, 0, 0]
+u_k_delay = [0, 0, 0]
 
 # Condicaoes Iniciais [base, shoulder, forearm]
 r_k = [290, 40, 32]
 y_k = [290, 40, 32]
 e_k = [0, 0, 0]
-u_k = ""
+u_k_string = ""
+e_k_string = ""
 
 ############################################################
 # main loop
 ############################################################
-print "---------------------------------\nIniciando a planta simulada..."
+print "---------------------------------\nInicializando a planta simulada..."
 
 idx = 0
 
-while idx <= 2000: # tempo de simulacao
+while idx <= 200: # tempo de simulacao
+
+	print "Iteracao: " + str(idx)
 
 	# Construindo a referencia r(k)
-	if idx <= 1000:
+	if idx <= 100:
 		r_k = [290, 40, 32]
 	else:
 		r_k = [200, 80, 100]
@@ -75,25 +75,25 @@ while idx <= 2000: # tempo de simulacao
 	e_k[1] = r_k[1] - y_k[1]
 	e_k[2] = r_k[2] - y_k[2]
 
-	e_k = ','.join(str(aux) for aux in e_k)
+	e_k_string = ','.join(str(aux) for aux in e_k)
 
-	print e_k
+	print "Valor Escrito:"
+	print e_k_string
 
-	ser.write(e_k)
+	ser.write(e_k_string)
 
-	while u_k=="":
-		u_k = ser.readline()
+	while u_k_string=="":
+		u_k_string = ser.readline()
 
 	print "Valor Lido:"
 
-	print u_k
+	# Tratando quando os dados sao recebidos como string
+	if type(u_k_string) is str:
+		u_k_string = u_k_string.split(',')
 
-	u_k = u_k.split(',')
-
-	idx2 = 0
-	for charac in u_k:
-		u_k[idx2] = int(charac)
-		idx2+=1
+	if (type(u_k_string[0]) is str) or (type(u_k_string[1]) is str) or (type(u_k_string[2]) is str):
+		for charac in u_k_string:
+			u_k.append(float(charac))
 
 	print u_k
 
@@ -130,6 +130,12 @@ while idx <= 2000: # tempo de simulacao
 	# Pegando os valores da iteracao anterior
 	y_k_delay = y_k
 	u_k_delay = u_k
+
+	# Reinicializando os valores atuais
+	e_k = [0, 0, 0]
+	u_k = list()
+	u_k_string = ""
+	e_k_string = ""
 
 	idx+=1
 
