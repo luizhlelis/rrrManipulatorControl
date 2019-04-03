@@ -44,7 +44,7 @@ y_k_Output_Shoulder	= list()
 y_k_Output_Forearm	= list()
 
 u_k = list()
-y_k_delay = [0, 0, 0]
+y_k_delay = [290, 40, 32]
 u_k_delay = [0, 0, 0]
 
 # Condicaoes Iniciais [base, shoulder, forearm]
@@ -61,12 +61,12 @@ print "---------------------------------\nInicializando a planta simulada..."
 
 idx = 0
 
-while idx <= 200: # tempo de simulacao
+while idx <= 2000: # tempo de simulacao
 
 	print "Iteracao: " + str(idx)
 
 	# Construindo a referencia r(k)
-	if idx <= 100:
+	if idx <= 1000:
 		r_k = [290, 40, 32]
 	else:
 		r_k = [200, 80, 100]

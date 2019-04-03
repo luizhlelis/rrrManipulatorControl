@@ -41,7 +41,7 @@ print "---------------------------------\nControl begin..."
 
 idx = 0
 
-while idx <= 200: # tempo de simulacao
+while idx <= 2000: # tempo de simulacao
 
 	while e_k_string=="":
 		e_k_string = ser.readline()
