@@ -98,34 +98,34 @@ while idx <= 2000: # tempo de simulacao
 	print u_k
 
 	# BASE - Funcao de transferência da planta
-	y_k[0] = 0.01*u_k_delay[0] + 0.09*y_k_delay[0]
+	y_k[0] = 0.0663*u_k_delay[0] + 0.932*y_k_delay[0]
 
 	# SHOULDER - Funcao de transferência da planta
-	y_k[1] = 1.583*u_k_delay[1] - 1.596*y_k_delay[1]
+	y_k[1] = 0.06134*u_k_delay[1] - 0.9382*y_k_delay[1]
 
 	# FOREARM - Funcao de transferência da planta
-	y_k[2] = 0.9556*u_k_delay[2] - 0.9407*y_k_delay[2]
+	y_k[2] = 0.06474*u_k_delay[2] - 0.9363*y_k_delay[2]
 
 	x_axis_List.append(idx)
 
 	r_k_Input_Base.append(r_k[0])
 	y_k_Output_Base.append(y_k[0])
 
-	r_k_Input_Shoulder.append(r_k[0])
-	y_k_Output_Shoulder.append(y_k[0])
+	r_k_Input_Shoulder.append(r_k[1])
+	y_k_Output_Shoulder.append(y_k[1])
 
-	r_k_Input_Forearm.append(r_k[0])
-	y_k_Output_Forearm.append(y_k[0])
+	r_k_Input_Forearm.append(r_k[2])
+	y_k_Output_Forearm.append(y_k[2])
 
 	# Arquivo de saida acao de controle
 	outputFileBase.write(str(idx) + ',' + str(y_k[0]) + '\n')
-	outputFileShoulder.write(str(idx) + ',' + str(y_k[0]) + '\n')
-	outputFileForearm.write(str(idx) + ',' + str(y_k[0]) + '\n')
+	outputFileShoulder.write(str(idx) + ',' + str(y_k[1]) + '\n')
+	outputFileForearm.write(str(idx) + ',' + str(y_k[2]) + '\n')
 
 	# Arquivo de saida y(k)
 	outputFileBaseControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
-	outputFileShoulderControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
-	outputFileForearmControl.write(str(idx) + ',' + str(u_k[0]) + '\n')
+	outputFileShoulderControl.write(str(idx) + ',' + str(u_k[1]) + '\n')
+	outputFileForearmControl.write(str(idx) + ',' + str(u_k[2]) + '\n')
 
 	# Pegando os valores da iteracao anterior
 	y_k_delay = y_k
