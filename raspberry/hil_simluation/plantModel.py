@@ -50,9 +50,8 @@ u_k_delay = [0, 0, 0]
 # Condicaoes Iniciais [base, shoulder, forearm]
 r_k = [290, 40, 32]
 y_k = [290, 40, 32]
-e_k = [0, 0, 0]
 u_k_string = ""
-e_k_string = ""
+y_k_string = ""
 
 ############################################################
 # main loop
@@ -63,28 +62,28 @@ idx = 0
 
 while idx <= 2000: # tempo de simulacao
 
-	print "Iteracao: " + str(idx)
-
-	# Construindo a referencia r(k)
+	# A referencia r(k) eh construida no controlador, ele 
+	# esta aqui apenas para visualizacao grafica
 	if idx <= 1000:
 		r_k = [290, 40, 32]
 	else:
 		r_k = [200, 80, 100]
 
-	e_k[0] = r_k[0] - y_k[0]
-	e_k[1] = r_k[1] - y_k[1]
-	e_k[2] = r_k[2] - y_k[2]
+	print "Iteracao: " + str(idx)
 
-	e_k_string = ','.join(str(aux) for aux in e_k)
+	y_k_string = ','.join(str(aux) for aux in y_k)
 
 	print "Valor Escrito:"
-	print e_k_string
+	print y_k_string
 
-	ser.write(e_k_string)
+	ser.write(y_k_string)
+
+	print "meu cu1"
 
 	while u_k_string=="":
 		u_k_string = ser.readline()
 
+	print "meu cu2"
 	print "Valor Lido:"
 
 	# Tratando quando os dados sao recebidos como string
@@ -98,13 +97,13 @@ while idx <= 2000: # tempo de simulacao
 	print u_k
 
 	# BASE - Funcao de transferência da planta
-	y_k[0] = 0.0663*u_k_delay[0] + 0.932*y_k_delay[0]
+	y_k[0] = 0.01*u_k_delay[0] + 0.99*y_k_delay[0]
 
 	# SHOULDER - Funcao de transferência da planta
-	y_k[1] = 0.06134*u_k_delay[1] - 0.9382*y_k_delay[1]
+	y_k[1] = 0.0157*u_k_delay[1] - 0.9842*y_k_delay[1]
 
 	# FOREARM - Funcao de transferência da planta
-	y_k[2] = 0.06474*u_k_delay[2] - 0.9363*y_k_delay[2]
+	y_k[2] = 0.0095*u_k_delay[2] - 0.9906*y_k_delay[2]
 
 	x_axis_List.append(idx)
 
@@ -132,10 +131,8 @@ while idx <= 2000: # tempo de simulacao
 	u_k_delay = u_k
 
 	# Reinicializando os valores atuais
-	e_k = [0, 0, 0]
 	u_k = list()
 	u_k_string = ""
-	e_k_string = ""
 
 	idx+=1
 

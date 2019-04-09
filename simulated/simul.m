@@ -9,13 +9,12 @@ load('forearm/output_forearm_01s.mat')
 load('forearm/input_forearm_01s.mat')
 
 tf_base = tf([1.005],[1 1.006])
-% T = 0.07
-tf_base = c2d(tf_base,0.07,'zoh')
-time_base = 0:0.07:20.93;
-ref_base = zeros(1,300);
+tf_base = c2d(tf_base,0.01,'zoh')
+time_base = 0:0.01:19.99;
+ref_base = zeros(1,2000);
 
-for idx = 1:300
-    if idx <= 150
+for idx = 1:2000
+    if idx <= 1000
         ref_base(1,idx) = 290;
     else
         ref_base(1,idx) = 200;
@@ -36,12 +35,12 @@ title('Simulacao Base Manipulador')
 
 tf_shoulder = tf([1.583],[1 1.596])
 % T = 0.04
-tf_shoulder = c2d(tf_shoulder,0.04,'zoh')
-time_shoulder = 0:0.04:19.96;
-ref_shoulder = zeros(1,500);
+tf_shoulder = c2d(tf_shoulder,0.01,'zoh')
+time_shoulder = 0:0.01:19.99;
+ref_shoulder = zeros(1,2000);
 
-for idx = 1:500
-    if idx <= 250
+for idx = 1:2000
+    if idx <= 1000
         ref_shoulder(1,idx) = 40;
     else
         ref_shoulder(1,idx) = 80;
@@ -63,12 +62,12 @@ title('Simulacao Ombro Manipulador')
 
 tf_forearm = tf([0.9556],[1 0.9407])
 % T = 0.07
-tf_forearm = c2d(tf_forearm,0.07,'zoh')
-time_forearm = 0:0.07:20.93;
-ref_forearm = zeros(1,300);
+tf_forearm = c2d(tf_forearm,0.01,'zoh')
+time_forearm = 0:0.01:19.99;
+ref_forearm = zeros(1,2000);
 
-for idx = 1:300
-    if idx <= 150
+for idx = 1:2000
+    if idx <= 1000
         ref_forearm(1,idx) = 32;
     else
         ref_forearm(1,idx) = 100;
@@ -90,7 +89,7 @@ title('Simulacao Antebraco Manipulador')
 % ------------------------ Malha Fechada ------------------------- %
 
 c_base = tf([3.762 3.42],[1 0])
-c_base = c2d(c_base,0.07,'zoh')
+c_base = c2d(c_base,0.01,'zoh')
 % c_base_discrete = (3.762*z - 3.728)/(z-1) %
 mf_base = feedback(c_base*tf_base,1)
 
@@ -107,7 +106,7 @@ legend('degrau','real','simulado')
 title('Simulacao MF Base Manipulador')
 
 c_shoulder = tf([2.2436 3.16],[1 0])
-c_shoulder = c2d(c_shoulder,0.04,'zoh')
+c_shoulder = c2d(c_shoulder,0.01,'zoh')
 % c_shoulder_discrete = (2.244*z - 2.212)/(z-1) %
 mf_shoulder = feedback(c_shoulder*tf_shoulder,1)
 
@@ -124,7 +123,7 @@ legend('degrau','real','simulado')
 title('Simulacao MF Ombro Manipulador')
 
 c_forearm = tf([3.74 3.4],[1 0])
-c_forearm = c2d(c_forearm,0.07,'zoh')
+c_forearm = c2d(c_forearm,0.01,'zoh')
 % c_forearm_discrete = (3.74*z - 3.706)/(z-1) %
 mf_forearm = feedback(c_forearm*tf_forearm,1)
 
