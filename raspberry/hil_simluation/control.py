@@ -51,6 +51,7 @@ while idx <= 2000: # tempo de simulacao
 	else:
 		r_k = [200, 80, 100]
 
+	# Espera ter valor escrito no buffer de entrada
 	while y_k_string=="":
 		y_k_string = ser.readline()
 
@@ -91,6 +92,8 @@ while idx <= 2000: # tempo de simulacao
 	print u_k_string
 
 	ser.write(u_k_string)
+
+	#time.sleep(0.01)
 
 	# Reinicializando os valores atuais
 	u_k = [0, 0, 0]

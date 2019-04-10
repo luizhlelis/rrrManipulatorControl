@@ -78,12 +78,10 @@ while idx <= 2000: # tempo de simulacao
 
 	ser.write(y_k_string)
 
-	print "meu cu1"
-
+	# Espera ter valor escrito no buffer de entrada
 	while u_k_string=="":
 		u_k_string = ser.readline()
 
-	print "meu cu2"
 	print "Valor Lido:"
 
 	# Tratando quando os dados sao recebidos como string
@@ -100,10 +98,10 @@ while idx <= 2000: # tempo de simulacao
 	y_k[0] = 0.01*u_k_delay[0] + 0.99*y_k_delay[0]
 
 	# SHOULDER - Funcao de transferência da planta
-	y_k[1] = 0.0157*u_k_delay[1] - 0.9842*y_k_delay[1]
+	y_k[1] = 0.0157*u_k_delay[1] + 0.9842*y_k_delay[1]
 
 	# FOREARM - Funcao de transferência da planta
-	y_k[2] = 0.0095*u_k_delay[2] - 0.9906*y_k_delay[2]
+	y_k[2] = 0.009511*u_k_delay[2] + 0.9906*y_k_delay[2]
 
 	x_axis_List.append(idx)
 

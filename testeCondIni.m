@@ -75,12 +75,10 @@ for idx = 1:2000
     u_k_base = u_k_base_delay + 3.762*e_k_base - 3.728*e_k_base_delay;
     u_k_shoulder = u_k_shoulder_delay + 2.244*e_k_shoulder - 2.212*e_k_shoulder_delay;
     u_k_forearm = u_k_forearm_delay + 3.74*e_k_forearm - 3.706*e_k_forearm_delay;
-    
-    pause(0.01)
       
     y_k_base = 0.01*u_k_base_delay + 0.99*y_k_base_delay;
     y_k_shoulder = 0.0157*u_k_shoulder_delay + 0.9842*y_k_shoulder_delay;
-    y_k_forearm = 0.0095*u_k_forearm_delay + 0.9906*y_k_forearm_delay;
+    y_k_forearm = 0.009511*u_k_forearm_delay + 0.9906*y_k_forearm_delay;
     
     y_k_base_Output(idx) = y_k_base;
     y_k_shoulder_Output(idx) = y_k_shoulder;
@@ -112,7 +110,7 @@ end
 figure(1)
 stairs(x_axis(1,:),r_k_base_Output(1,:),'b');
 hold on
-stairs(x_axis(1,:),y_k_base_Output(1,:),'g');
+stairs(x_axis(1,:),y_k_base_Output(1,:),'r');
 legend('degrau','resposta')
 title('Simulacao Base Manipulador')
 
@@ -123,7 +121,7 @@ title('Acao de Controle')
 figure(3)
 stairs(x_axis(1,:),r_k_shoulder_Output(1,:),'b');
 hold on
-stairs(x_axis(1,:),y_k_shoulder_Output(1,:),'g');
+stairs(x_axis(1,:),y_k_shoulder_Output(1,:),'r');
 legend('degrau','resposta')
 title('Simulacao shoulder Manipulador')
 
@@ -134,7 +132,7 @@ title('Acao de Controle')
 figure(5)
 stairs(x_axis(1,:),r_k_forearm_Output(1,:),'b');
 hold on
-stairs(x_axis(1,:),y_k_forearm_Output(1,:),'g');
+stairs(x_axis(1,:),y_k_forearm_Output(1,:),'r');
 legend('degrau','resposta')
 title('Simulacao forearm Manipulador')
 
