@@ -14,7 +14,7 @@ os.nice(19)
 # definicoes globais
 ser = serial.Serial(
  port='/dev/ttyS0',
- baudrate = 9600,
+ baudrate = 250000,
  parity=serial.PARITY_NONE,
  stopbits=serial.STOPBITS_ONE,
  bytesize=serial.EIGHTBITS,
