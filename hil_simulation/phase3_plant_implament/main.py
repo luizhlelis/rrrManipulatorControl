@@ -42,17 +42,16 @@ inputData_forearm = 32
 
 masterdata = master.get()
 
-idx = 0
-
 ############################################################
 # main loop
 ############################################################
 print "---------------------------------\nControl begin..."
-while idx <= 2000: # tempo de simulacao
+comecou = time.time()
+while time.time() - comecou <= 20.0: # tempo de simulacao
 	
 	#print master.getBase()
 
-	if idx <= 1000:
+	if time.time() - comecou <= 10.0:
 		inputData_base = 290
 		inputData_shoulder = 40
 		inputData_forearm = 32
@@ -64,36 +63,40 @@ while idx <= 2000: # tempo de simulacao
 	masterdata[0] = (inputData_base, 350)
 	masterdata[1] = (inputData_shoulder, 350)
 	masterdata[2] = (inputData_forearm, 350)
+
 	master.set(masterdata)
 
-	outputData = master.getBase()
+	outputData = master.get()
 
 	LOGID = 0
 
-	x_axis_List.append(idx)
+	tNow = time.time().real - comecou
+	x_axis_List.append(tNow)
+
+	print 'idx-> '+ str(tNow) + '\n'
 
 	qInput_base.append(inputData_base)
 	qInput_shoulder.append(inputData_shoulder)
 	qInput_forearm.append(inputData_forearm)
 
 	aux1 = outputData[0]
-	qOutput_base.append(a)
+	qOutput_base.append(aux1)
 	aux2 = outputData[1]
-	qOutput_shoulder.append(a)
+	qOutput_shoulder.append(aux2)
 	aux3 = outputData[2]
-	qOutput_forearm.append(a)
+	qOutput_forearm.append(aux3)
 
-	outputFile_base.write(str(idx) + ',' + str(aux1) + '\n')
-	outputFile_shoulder.write(str(idx) + ',' + str(aux2) + '\n')
-	outputFile_forearm.write(str(idx) + ',' + str(aux3) + '\n')
-
-	idx++;
+	outputFile_base.write(str(tNow) + ',' + str(aux1) + '\n')
+	outputFile_shoulder.write(str(tNow) + ',' + str(aux2) + '\n')
+	outputFile_forearm.write(str(tNow) + ',' + str(aux3) + '\n')
 
 	time.sleep(.01)
 
 ############################################################
 # destruindo objetos
-outputFile.close()
+outputFile_base.close()
+outputFile_shoulder.close()
+outputFile_forearm.close()
 print "Destruindo objetos..."
 del master
 #del slave

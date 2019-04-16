@@ -317,15 +317,16 @@ class Crustcrawler:
 		angle_ref = min(angle_ref, MAX_LIMIT_BASE)
 		
 		# seta a referencia do controlador
-		self.BaseCtrl.setReference(angle_ref)
+		self.BaseCtrl.setReference(angle_ref, self.u_k_base, self.e_k_base)
 		
 		# medindo posicao e velocidade correntes
 		angle, speed = self.getBase()
 		
 		# pega a acao de controle
-		self.u_k_base, self.e_k_base = self.BaseCtrl.get_U_k(angle, angle_ref, self.u_k_base, self.e_k_base)
+		self.u_k_base, self.e_k_base = self.BaseCtrl.get_U_k(angle)
 		
 		# seta posicao do servo da base
+		# print 'angle = ' + str(self.u_k_base) + ' vel = ' + str(self.ref[0][1]) + '\n'
 		self.setJoint(BASE_AXIS_ID, self.u_k_base, self.ref[0][1])
 		
 	#########################################################################
@@ -349,13 +350,13 @@ class Crustcrawler:
 		angle_ref = min(angle_ref, MAX_LIMIT_SHOULDER)
 		
 		# seta a referencia do controlador
-		self.ShoulderCtrl.setReference(angle_ref)
+		self.ShoulderCtrl.setReference(angle_ref, self.u_k_shoulder, self.e_k_shoulder)
 		
 		# medindo posicao e velocidade correntes
 		angle, speed = self.getShoulder()
 		
 		# pega a acao de controle
-		self.u_k_shoulder, self.e_k_shoulder = self.ShoulderCtrl.get_U_k(angle, angle_ref, self.u_k_shoulder, self.e_k_shoulder)
+		self.u_k_shoulder, self.e_k_shoulder = self.ShoulderCtrl.get_U_k(angle)
 		
 		# seta posicao do servo do ombro
 		self.setJoint(SHOULDER_A_AXIS_ID, self.u_k_shoulder, self.ref[1][1])
@@ -382,13 +383,13 @@ class Crustcrawler:
 		angle_ref = min(angle_ref, MAX_LIMIT_FOREARM)
 		
 		# seta a referencia do controlador
-		self.ForearmCtrl.setReference(angle_ref)
+		self.ForearmCtrl.setReference(angle_ref, self.u_k_forearm, self.e_k_forearm)
 		
 		# medindo posicao e velocidade correntes
 		angle, speed = self.getForearm()
 		
 		# pega a acao de controle
-		self.u_k_forearm, self.e_k_forearm = self.ForearmCtrl.get_U_k(angle, angle_ref, self.u_k_forearm, self.e_k_forearm)
+		self.u_k_forearm, self.e_k_forearm = self.ForearmCtrl.get_U_k(angle)
 		
 		# seta posicao do servo do antebraco
 		self.setJoint(FOREARM_A_AXIS_ID, self.u_k_forearm, self.ref[2][1])
@@ -497,10 +498,6 @@ class Crustcrawler:
 		print "Shoulder >>\t", round(angle, m), round(speed, m)
 		angle, speed = self.getForearm()
 		print "Forearm  >>\t", round(angle, m), round(speed, m)
-		angle, speed = self.getWrist()
-		print "Wrist	>>\t", round(angle, m), round(speed, m)
-		angle, speed = self.getGrip()
-		print "Grip	 >>\t", round(angle, m), round(speed, m)
 		print "---------------------------"
 	
 	#########################################################################

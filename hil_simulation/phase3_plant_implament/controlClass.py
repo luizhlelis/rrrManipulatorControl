@@ -22,28 +22,30 @@ class Controller:
 		self.reference = 0.0
 		self.Kp = KPgain
 		self.Ki = KIgain
-		self.u_k = 0
-		self.e_k = 0
+		self.u_k_delay = 0
+		self.e_k_delay = 0
 	
 	#########################################################################
 	# referencia de controle
 	#########################################################################
-	def setReference(self, ref):
+	def setReference(self, ref, u_delay, e_delay):
 		self.reference = ref
+		self.u_k_delay = u_delay
+		self.e_k_delay = e_delay
 		
 	#########################################################################
 	# calcula acao de controle
 	#########################################################################
-	def get_U_k(self, y_k, r_k, u_k_delay, e_k_delay):
+	def get_U_k(self, y_k):
 		
 		# Calcula lei de controle
 		r_k = self.reference
 		e_k = r_k - y_k
 		
 		# Determina qual caminho o servo deve seguir
-		u_k = u_k_delay + self.Kp*e_k - self.Ki*e_k_delay
+		u_k = self.u_k_delay + self.Kp*e_k - self.Ki*self.e_k_delay
 			
-		return self.u_k, self.e_k
+		return u_k, e_k
 	
 	#########################################################################
 	# destrutor
