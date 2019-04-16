@@ -1,3 +1,3 @@
-raspberry/collectingData/logs/
-raspberry/hil_simulation/logs/
-raspberry/plant_implement/logs/
+hil_simulation/collectingData/logs/
+hil_simulation/phase2_control_simulation/logs/
+hil_simulation/phase3_plant_implament/logs/
