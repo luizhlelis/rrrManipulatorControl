@@ -126,6 +126,8 @@ class Crustcrawler:
 		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE)
 		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER)
 		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM)
+
+		self.outputFile_base = open('data/controlAction_base.txt', 'w')
 		
 		#########################################################################
 		# variaveis de entrada e saida
@@ -208,8 +210,10 @@ class Crustcrawler:
 		med_shoulder = self.getShoulder()[0]
 		med_forearm = self.getForearm()[0]
 
+		print 'inicializou-> ' + str(med_base) + '\n'
+
 		# seta referencia de controle para o meio
-		self.set([(med_base, 0), (med_shoulder, 0), (med_forearm, 0)])
+		self.set([(290, 0), (med_shoulder, 0), (med_forearm, 0)])
 	
 	#########################################################################
 	# le as informacoes de todas as juntas
@@ -227,11 +231,10 @@ class Crustcrawler:
 	# thread de controle principal
 	#########################################################################
 	def controlLoop(self):
-	
 		print ">> Inicializando thread de controle..."
-		
 		# main loop
-		while(True):
+		idx = 0
+		while idx <= 120:
 		
 			# le as irformacoes de todas as juntas
 			self.mutex.acquire()
@@ -251,6 +254,11 @@ class Crustcrawler:
 			#if not self.ismaster:
 			self.write_all()
 			self.mutex.release()
+
+			print str(idx)
+
+			idx+=1
+		self.outputFile_base.close()
 				
 	#########################################################################
 	# read position and speed from all servos in the robot
@@ -324,9 +332,11 @@ class Crustcrawler:
 		
 		# pega a acao de controle
 		self.u_k_base, self.e_k_base = self.BaseCtrl.get_U_k(angle)
+		self.outputFile_base.write(str(self.u_k_base) + ',' + str(self.e_k_base) + '\n')
 		
 		# seta posicao do servo da base
 		# print 'angle = ' + str(self.u_k_base) + ' vel = ' + str(self.ref[0][1]) + '\n'
+		# print 'meu cu = ' + str(self.ref[0][1]) + '\n'
 		self.setJoint(BASE_AXIS_ID, self.u_k_base, self.ref[0][1])
 		
 	#########################################################################

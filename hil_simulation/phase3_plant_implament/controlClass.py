@@ -42,6 +42,8 @@ class Controller:
 		r_k = self.reference
 		e_k = r_k - y_k
 		
+		# print str(self.Kp) + ', ' + str(self.Ki) + '\n'
+
 		# Determina qual caminho o servo deve seguir
 		u_k = self.u_k_delay + self.Kp*e_k - self.Ki*self.e_k_delay
 			
