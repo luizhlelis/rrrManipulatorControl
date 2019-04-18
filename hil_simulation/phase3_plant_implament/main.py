@@ -42,6 +42,8 @@ inputData_forearm = 32
 
 masterdata = master.get()
 
+master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
+
 ############################################################
 # main loop
 ############################################################
@@ -57,6 +59,7 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 		inputData_base = 200
 		inputData_shoulder = 80
 		inputData_forearm = 100
+
 
 	masterdata[0] = (inputData_base, 350)
 	# masterdata[1] = (inputData_shoulder, 350)

@@ -259,6 +259,16 @@ class Crustcrawler:
 
 			idx+=1
 		self.outputFile_base.close()
+
+	#########################################################################
+	# condicoes iniciais
+	#########################################################################
+	def initialize(self, angle_base, angle_shoulder, angle_forearm):
+
+		# seta a referencia de cada junta separadamente
+		self.setBaseOpenLoop(angle_base)
+		self.setShoulderOpenLoop(angle_shoulder)
+		self.setForearmOpenLoop(angle_forearm)
 				
 	#########################################################################
 	# read position and speed from all servos in the robot
@@ -336,8 +346,15 @@ class Crustcrawler:
 		
 		# seta posicao do servo da base
 		# print 'angle = ' + str(self.u_k_base) + ' vel = ' + str(self.ref[0][1]) + '\n'
-		# print 'meu cu = ' + str(self.ref[0][1]) + '\n'
 		self.setJoint(BASE_AXIS_ID, self.u_k_base, self.ref[0][1])
+
+	def setBaseOpenLoop(self, angle_ref):
+
+		# limitacao angular de colisao
+		angle_ref = max(angle_ref, MIN_LIMIT_BASE)
+		angle_ref = min(angle_ref, MAX_LIMIT_BASE)
+
+		self.setJoint(BASE_AXIS_ID, angle_ref, 350)
 		
 	#########################################################################
 	# read shoulder axis
@@ -371,6 +388,16 @@ class Crustcrawler:
 		# seta posicao do servo do ombro
 		self.setJoint(SHOULDER_A_AXIS_ID, self.u_k_shoulder, self.ref[1][1])
 		self.setJoint(SHOULDER_B_AXIS_ID, self.u_k_shoulder, self.ref[1][1])
+
+	def setShoulderOpenLoop(self, angle_ref):
+
+		# limitacao angular de colisao
+		angle_ref = max(angle_ref, MIN_LIMIT_SHOULDER)
+		angle_ref = min(angle_ref, MAX_LIMIT_SHOULDER)
+		
+		# seta posicao do servo do ombro
+		self.setJoint(SHOULDER_A_AXIS_ID, angle_ref, 350)
+		self.setJoint(SHOULDER_B_AXIS_ID, angle_ref, 350)
 	
 	#########################################################################
 	# read forearm axis
@@ -404,6 +431,16 @@ class Crustcrawler:
 		# seta posicao do servo do antebraco
 		self.setJoint(FOREARM_A_AXIS_ID, self.u_k_forearm, self.ref[2][1])
 		self.setJoint(FOREARM_B_AXIS_ID, self.u_k_forearm, self.ref[2][1])
+
+	def setForearmOpenLoop(self, angle_ref):
+		
+		# limitacao angular de colisao
+		angle_ref = max(angle_ref, MIN_LIMIT_FOREARM)
+		angle_ref = min(angle_ref, MAX_LIMIT_FOREARM)
+		
+		# seta posicao do servo do antebraco
+		self.setJoint(FOREARM_A_AXIS_ID, angle_ref, 350)
+		self.setJoint(FOREARM_B_AXIS_ID, angle_ref, 350)
 		
 	#########################################################################
 	# sincroniza todos os servos
