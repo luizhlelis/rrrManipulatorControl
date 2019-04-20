@@ -21,6 +21,9 @@ master = cc.Crustcrawler(MASTER_PORT, True)
 # create slave robot
 #slave = cc.Crustcrawler(SLAVE_PORT, False)
 # esperando robos irem para a posicao inicial
+
+inputFile_base = open('data/output_base.txt', 'w')
+
 outputFile_base = open('data/output_base.txt', 'w')
 outputFile_shoulder = open('data/output_shoulder.txt', 'w')
 outputFile_forearm = open('data/output_forearm.txt', 'w')
@@ -42,7 +45,7 @@ inputData_forearm = 32
 
 masterdata = master.get()
 
-master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
+# master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
 
 ############################################################
 # main loop
@@ -89,11 +92,13 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	# aux3 = outputData[2]
 	# qOutput_forearm.append(aux3)
 
-	outputFile_base.write(str(tNow) + ',' + str(aux1[0]) + '\n')
+	# outputFile_base.write(str(tNow) + ',' + str(aux1[0]) + '\n')
+	outputFile_base.write(str(aux1) + '\n')
+	inputFile_base.write(str(aux1) + '\n')
 	# outputFile_shoulder.write(str(tNow) + ',' + str(aux2) + '\n')
 	# outputFile_forearm.write(str(tNow) + ',' + str(aux3) + '\n')
 
-	time.sleep(.01)
+	time.sleep(.23)
 
 ############################################################
 # destruindo objetos

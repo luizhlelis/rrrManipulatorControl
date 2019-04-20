@@ -71,6 +71,10 @@ KIGAIN_BASE = 3.728
 KIGAIN_SHOULDER = 2.212
 KIGAIN_FOREARM = 3.706
 
+
+KPGAIN_TORQUE = 8.0
+KDGAIN_TORQUE = -1.0
+
 #############################################################################
 # classe para controle do manipulador
 #############################################################################
@@ -123,9 +127,9 @@ class Crustcrawler:
 		#########################################################################
 		# cria controladores de juntas
 		#########################################################################
-		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE)
-		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER)
-		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM)
+		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE, KPGAIN_TORQUE, KDGAIN_TORQUE)
+		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER, KPGAIN_TORQUE, KDGAIN_TORQUE)
+		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM, KPGAIN_TORQUE, KDGAIN_TORQUE)
 
 		self.outputFile_base = open('data/controlAction_base.txt', 'w')
 		
@@ -136,10 +140,13 @@ class Crustcrawler:
 		self.angles.append([])
 		self.speeds = []
 		self.speeds.append([])
+		self.torqueLelis = []
+		self.torqueLelis.append([])
 		for id in range(1, len(self.Actuators)):
 			# le as informacoes de controle
 			self.angles.append(self.Actuators[id].current_position)
 			self.speeds.append(self.Actuators[id].current_speed)
+			self.torqueLelis.append(self.Actuators[id].torque_limit)
 			
 		self.goals = []
 		self.goals.append([])
@@ -246,8 +253,8 @@ class Crustcrawler:
 			
 			# seta a referencia de cada junta separadamente
 			self.setBase(self.ref[0][0])
-			self.setShoulder(self.ref[1][0])
-			self.setForearm(self.ref[2][0])
+			# self.setShoulderOpenLoop(self.ref[1][0])
+			# self.setForearmOpenLoop(self.ref[2][0])
 		
 			# escreve todo mundo
 			self.mutex.acquire()
@@ -267,8 +274,8 @@ class Crustcrawler:
 
 		# seta a referencia de cada junta separadamente
 		self.setBaseOpenLoop(angle_base)
-		self.setShoulderOpenLoop(angle_shoulder)
-		self.setForearmOpenLoop(angle_forearm)
+		# self.setShoulderOpenLoop(angle_shoulder)
+		# self.setForearmOpenLoop(angle_forearm)
 				
 	#########################################################################
 	# read position and speed from all servos in the robot
@@ -279,6 +286,7 @@ class Crustcrawler:
 			try:
 				self.angles[id] = self.Actuators[id].current_position
 				self.speeds[id] = self.Actuators[id].current_speed
+				self.torqueLelis[id] = self.Actuators[id].torque_limit
 				#torque = self.Actuators[id].current_load
 			except:
 				None
@@ -303,7 +311,7 @@ class Crustcrawler:
 	#########################################################################
 	def getJoint(self, id):
 		#self.mutex.acquire()
-		temp = self.pos2deg(self.angles[id]), self.speed2deg_sec(self.speeds[id])
+		temp = self.pos2deg(self.angles[id]), self.torqueLelis[id]
 		#self.mutex.release()
 	
 		# retorn position and speed		
@@ -341,12 +349,12 @@ class Crustcrawler:
 		angle, speed = self.getBase()
 		
 		# pega a acao de controle
-		self.u_k_base, self.e_k_base = self.BaseCtrl.get_U_k(angle)
+		self.u_k_base, self.e_k_base, torque = self.BaseCtrl.get_U_k(angle)
 		self.outputFile_base.write(str(self.u_k_base) + ',' + str(self.e_k_base) + '\n')
 		
 		# seta posicao do servo da base
 		# print 'angle = ' + str(self.u_k_base) + ' vel = ' + str(self.ref[0][1]) + '\n'
-		self.setJoint(BASE_AXIS_ID, self.u_k_base, self.ref[0][1])
+		self.setJoint(BASE_AXIS_ID, self.u_k_base, torque)
 
 	def setBaseOpenLoop(self, angle_ref):
 

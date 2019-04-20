@@ -18,12 +18,15 @@ class Controller:
 	#########################################################################
 	# construtor
 	#########################################################################
-	def __init__(self, KPgain, KIgain):
+	def __init__(self, KPgain, KIgain, KPgainTorque, KDgainTorque):
 		self.reference = 0.0
 		self.Kp = KPgain
 		self.Ki = KIgain
+		self.KpTorque = KPgainTorque
+		self.KdTorque = KDgainTorque
 		self.u_k_delay = 0
 		self.e_k_delay = 0
+		self.torque_limit = 0
 	
 	#########################################################################
 	# referencia de controle
@@ -41,13 +44,24 @@ class Controller:
 		# Calcula lei de controle
 		r_k = self.reference
 		e_k = r_k - y_k
-		
-		# print str(self.Kp) + ', ' + str(self.Ki) + '\n'
 
-		# Determina qual caminho o servo deve seguir
+		# Controle de posicao
 		u_k = self.u_k_delay + self.Kp*e_k - self.Ki*self.e_k_delay
+
+		torque = self.KpTorque*e_k
+
+		# Determina para qual lado ir
+		if y_k > (r_k + MARGIN):
+			self.u_k = MINP
+			self.torque_limit = torque
+		elif y_k < (r_k - MARGIN):
+			self.u_k = MAXP
+			self.torque_limit = torque
+		else:
+			self.torque_limit = 0
+			self.goal_position = y_k
 			
-		return u_k, e_k
+		return u_k, e_k, self.torque_limit
 	
 	#########################################################################
 	# destrutor
