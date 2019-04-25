@@ -52,3 +52,33 @@ stairs(timeShoulder0_23(1,:),resultStepShoulder0_23_segOrdem(101:187,1),'Color',
 axis([5 18 35 85])
 legend('degrau','real','simulado')
 title('Simulacao Shoulder Manipulador Ts = 0.23s')
+
+% ---------------------------- Malha Fechada -------------------------
+
+% C_BASE = C_FOREARM = C_SHOULDER = ( 3.74*s + 3.4 ) / s
+% 
+% pid = kp + ki/s + kd*s
+% 
+% Zero = -0.909090
+% Polo = 0
+% 
+% Kp = 3.74
+% Ki = 3.4
+
+% c_pi = tf([3.74 3.4],[1 0])
+% c_pi = c2d(c_pi,0.23,'zoh')
+c_pi = tf([0.15724 0.065128808],[1 -1],0.23)
+
+mf_shoulder = feedback(c_pi*tfShoulder0_23_segOrdem,1)
+
+result_mf_step_shoulder = lsim(mf_shoulder,refShoulder0_23_estab,timeShoulder0_23_estab);
+
+figure(3)
+stairs(timeShoulder0_23(1,:),inputShoulder0_23(:,1),'b', 'LineWidth', 1.5);
+hold on
+stairs(timeShoulder0_23(1,:),outputShoulder0_23(:,1),'r', 'LineWidth', 1.5);
+hold on
+stairs(timeShoulder0_23(1,:),result_mf_step_shoulder(101:187,1),'b','Color',darkGreen, 'LineWidth', 1.5);
+axis([5 18 35 85])
+legend('degrau','real','simulado')
+title('Simulacao MF Shoulder Manipulador')

@@ -65,9 +65,10 @@ title('Simulacao Forearm Manipulador Ts = 0.23s')
 % Kp = 3.74
 % Ki = 3.4
 
-c_pi = tf([3.74 3.4],[1 0])
-c_pi = c2d(c_pi,0.23,'zoh')
-mf_forearm = feedback(c_pi*tfForearm0_23,1)
+% c_pi = tf([3.74 3.4],[1 0])
+% c_pi = c2d(c_pi,0.23,'zoh')
+c_pi = tf([0.41305 -0.200783605],[1 -1],0.23)
+mf_forearm = feedback(c_pi*tfForearm0_23_segOrdem,1)
 
 result_mf_step_forearm = lsim(mf_forearm,refForearm0_23_estab,timeForearm0_23_estab);
 
