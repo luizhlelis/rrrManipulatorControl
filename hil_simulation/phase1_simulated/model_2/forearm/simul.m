@@ -51,3 +51,32 @@ stairs(timeForearm0_23(1,:),resultStepForearm0_23_segOrdem(101:187,1),'Color',da
 axis([5 18 20 115])
 legend('degrau','real','simulado')
 title('Simulacao Forearm Manipulador Ts = 0.23s')
+
+
+% ----------------------------- MALHA FECHADA ----------------------------
+
+% C_BASE = C_FOREARM = ( 3.74*s + 3.4 ) / s
+% 
+% pid = kp + ki/s + kd*s
+% 
+% Zero = -0.909090
+% Polo = 0
+% 
+% Kp = 3.74
+% Ki = 3.4
+
+c_pi = tf([3.74 3.4],[1 0])
+c_pi = c2d(c_pi,0.23,'zoh')
+mf_forearm = feedback(c_pi*tfForearm0_23,1)
+
+result_mf_step_forearm = lsim(mf_forearm,refForearm0_23_estab,timeForearm0_23_estab);
+
+figure(3)
+stairs(timeForearm0_23(1,:),inputForearm0_23(:,1),'b', 'LineWidth', 1.5);
+hold on
+stairs(timeForearm0_23(1,:),outputForearm0_23(:,1),'r', 'LineWidth', 1.5);
+hold on
+stairs(timeForearm0_23(1,:),result_mf_step_forearm(101:187,1),'b','Color',darkGreen, 'LineWidth', 1.5);
+axis([5 18 20 115])
+legend('degrau','real','simulado')
+title('Simulacao MF Forearm Manipulador')
