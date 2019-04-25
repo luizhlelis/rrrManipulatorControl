@@ -64,12 +64,12 @@ TORQUE_CONV_RATIO   = A12_MAX_TORQUE/A12_MAX_TORQUEBIN
 
 #########
 # ganhos de controle
-KPGAIN_BASE = 3.762
-KPGAIN_SHOULDER = 2.244
-KPGAIN_FOREARM = 3.74
-KIGAIN_BASE = 3.728
-KIGAIN_SHOULDER = 2.212
-KIGAIN_FOREARM = 3.706
+KPGAIN_BASE = 0.413
+KPGAIN_SHOULDER = 0.1572
+KPGAIN_FOREARM = 0.413
+KIGAIN_BASE = 0.2008
+KIGAIN_SHOULDER = 0.06513
+KIGAIN_FOREARM = 0.2008
 
 
 KPGAIN_TORQUE = 8.0
@@ -127,9 +127,9 @@ class Crustcrawler:
 		#########################################################################
 		# cria controladores de juntas
 		#########################################################################
-		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE, KPGAIN_TORQUE, KDGAIN_TORQUE)
-		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER, KPGAIN_TORQUE, KDGAIN_TORQUE)
-		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM, KPGAIN_TORQUE, KDGAIN_TORQUE)
+		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE)
+		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER)
+		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM)
 
 		self.outputFile_base = open('data/controlAction_base.txt', 'w')
 		
@@ -349,7 +349,7 @@ class Crustcrawler:
 		angle, speed = self.getBase()
 		
 		# pega a acao de controle
-		self.u_k_base, self.e_k_base, torque = self.BaseCtrl.get_U_k(angle)
+		self.u_k_base, self.e_k_base, torque = self.BaseCtrl.get_U_k(angle, self.ref[0][1])
 		self.outputFile_base.write(str(self.u_k_base) + ',' + str(self.e_k_base) + '\n')
 		
 		# seta posicao do servo da base

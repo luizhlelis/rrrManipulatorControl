@@ -18,12 +18,10 @@ class Controller:
 	#########################################################################
 	# construtor
 	#########################################################################
-	def __init__(self, KPgain, KIgain, KPgainTorque, KDgainTorque):
+	def __init__(self, KPgain, KIgain):
 		self.reference = 0.0
 		self.Kp = KPgain
 		self.Ki = KIgain
-		self.KpTorque = KPgainTorque
-		self.KdTorque = KDgainTorque
 		self.u_k_delay = 0
 		self.e_k_delay = 0
 		self.torque_limit = 0
@@ -39,29 +37,23 @@ class Controller:
 	#########################################################################
 	# calcula acao de controle
 	#########################################################################
-	def get_U_k(self, y_k):
+	def get_U_k(self, y_k, torque):
 		
 		# Calcula lei de controle
 		r_k = self.reference
 		e_k = r_k - y_k
 
+		torque = round(torque)
+		torque = abs(int(torque))
+		torque = min((torque, MAX_TORQUE))
+
 		# Controle de posicao
 		u_k = self.u_k_delay + self.Kp*e_k - self.Ki*self.e_k_delay
 
-		torque = self.KpTorque*e_k
-
-		# Determina para qual lado ir
-		if y_k > (r_k + MARGIN):
-			self.u_k = MINP
-			self.torque_limit = torque
-		elif y_k < (r_k - MARGIN):
-			self.u_k = MAXP
-			self.torque_limit = torque
-		else:
-			self.torque_limit = 0
-			self.goal_position = y_k
+		if y_k == (r_k + MARGIN) or y_k == (r_k - MARGIN):
+			torque = 0
 			
-		return u_k, e_k, self.torque_limit
+		return u_k, e_k, torque
 	
 	#########################################################################
 	# destrutor

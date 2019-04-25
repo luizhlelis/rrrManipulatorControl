@@ -45,7 +45,7 @@ inputData_forearm = 32
 
 masterdata = master.get()
 
-# master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
+master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
 
 ############################################################
 # main loop
