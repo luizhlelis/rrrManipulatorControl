@@ -83,7 +83,10 @@ title('Simulacao Base Manipulador Ts = 0.23s')
 
 %c_pi = tf([3.74 3.4],[1 0])
 %c_pi = c2d(c_pi,0.23,'zoh')
-c_pi = tf([0.41305 -0.200783605],[1 -1],0.23)
+% c_pi = tf([0.41305 -0.200783605],[1 -1],0.23)
+
+% Tirando o zero nao minimo do controlador
+c_pi = tf([0.152 0.032],[1 -1],0.23)
 mf_Base = feedback(c_pi*tfBase0_23_segOrdem,1)
 
 result_mf_step_base = lsim(mf_Base,refBase0_23_estab,timeBase0_23_estab);

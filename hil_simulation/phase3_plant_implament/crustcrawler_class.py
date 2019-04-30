@@ -64,12 +64,20 @@ TORQUE_CONV_RATIO   = A12_MAX_TORQUE/A12_MAX_TORQUEBIN
 
 #########
 # ganhos de controle
-KPGAIN_BASE = 0.413
-KPGAIN_SHOULDER = 0.1572
-KPGAIN_FOREARM = 0.413
-KIGAIN_BASE = -0.2008
-KIGAIN_SHOULDER = 0.06513
-KIGAIN_FOREARM = -0.2008
+# KPGAIN_BASE = 0.413
+# KPGAIN_SHOULDER = 0.1572
+# KPGAIN_FOREARM = 0.413
+# KIGAIN_BASE = -0.2008
+# KIGAIN_SHOULDER = 0.06513
+# KIGAIN_FOREARM = -0.2008
+
+# ganhos de controle (sem zero nao minimo)
+KPGAIN_BASE = 0.152
+KPGAIN_SHOULDER = 0.152
+KPGAIN_FOREARM = 0.152
+KIGAIN_BASE = 0.032
+KIGAIN_SHOULDER = 0.032
+KIGAIN_FOREARM = 0.032
 
 
 KPGAIN_TORQUE = 8.0
@@ -125,16 +133,6 @@ class Crustcrawler:
 		self.update()
 		
 		#########################################################################
-		# cria controladores de juntas
-		#########################################################################
-		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE)
-		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER)
-		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM)
-
-		self.outputFile_base = open('data/controlAction_base.txt', 'w')
-		self.outputFile_shoulder = open('data/controlAction_shoulder.txt', 'w')
-		
-		#########################################################################
 		# variaveis de entrada e saida
 		#########################################################################
 		self.angles = []
@@ -157,22 +155,36 @@ class Crustcrawler:
 			self.goals.append(0.0)
 			self.torques.append(0.0)
 
-		self.u_k_base = 0;
+		#########################################################################
+		# cria controladores de juntas
+		#########################################################################
+		# vetor de referencias dos angulos
+		self.ref = []
+		self.init_base = 0
+		self.init_shoulder = 0
+		self.init_forearm = 0
+		
+		# setando condicoes iniciais
+		self.initJoints()
+		# self.initialize(290, 40, 32)
+
+		self.BaseCtrl = ctrl.Controller(KPGAIN_BASE, KIGAIN_BASE, self.init_base, 0, self.init_base)
+		self.ShoulderCtrl = ctrl.Controller(KPGAIN_SHOULDER, KIGAIN_SHOULDER, self.init_shoulder, 0, self.init_shoulder)
+		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM, self.init_forearm, 0, self.init_forearm)
+
+		self.outputFile_base = open('data/controlAction_base.txt', 'w')
+		self.outputFile_shoulder = open('data/controlAction_shoulder.txt', 'w')
+
+		self.u_k_base = self.init_base;
 		self.e_k_base = 0;
-		self.u_k_shoulder = 0;
+		self.u_k_shoulder = self.init_shoulder;
 		self.e_k_shoulder = 0;
-		self.u_k_forearm = 0;
+		self.u_k_forearm = self.init_forearm;
 		self.e_k_forearm = 0;
 		
 		#########################################################################
 		# dispara thread principal de controle
 		#########################################################################
-		# vetor de referencias dos angulos
-		self.ref = []
-		
-		# setando condicoes iniciais
-		self.initJoints()
-		# self.initialize(290, 40, 32)
 		
 		# torques gravitacionais
 		self.Gq_shoulder = 0.0
@@ -215,14 +227,19 @@ class Crustcrawler:
 	#########################################################################
 	def initJoints(self):
 		# pega valores medios das juntas
-		# med_base = self.getBase()[0]
-		# med_shoulder = self.getShoulder()[0]
-		# med_forearm = self.getForearm()[0]
+		self.init_base = self.getBase()[0]
+		self.init_shoulder = self.getShoulder()[0]
+		self.init_forearm = self.getForearm()[0]
 
-		print 'inicializou-> 290, 40, 32 \n'
+		print 'inicializou-> ' + str(self.init_base) + ',' + str(self.init_shoulder) + ',' + str(self.init_forearm) + '\n'
+
+		initialCondition = [(0,0),(0,0),(0,0)]
+		initialCondition[0] = (self.init_base, 0)
+		# initialCondition[1] = (self.init_shoulder, 0)
+		# initialCondition[2] = (self.init_forearm, 0)
 
 		# seta referencia de controle para o meio
-		self.set([(290, 0), (40, 0), (32, 0)])
+		self.set(initialCondition)
 	
 	#########################################################################
 	# le as informacoes de todas as juntas
@@ -254,9 +271,9 @@ class Crustcrawler:
 			self.torque_grav()
 			
 			# seta a referencia de cada junta separadamente
-			# self.setBase(self.ref[0][0])
+			self.setBase(self.ref[0][0])
 			# self.setShoulder(self.ref[1][0])
-			self.setForearm(self.ref[2][0])
+			# self.setForearm(self.ref[2][0])
 		
 			# escreve todo mundo
 			self.mutex.acquire()

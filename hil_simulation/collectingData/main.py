@@ -43,19 +43,23 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	#print master.getBase()
 
 	if time.time() - comecou <= 10.0:
-		inputData = 290
+		inputData = 179.58984375
 	else:
-		inputData = 200
+		inputData = 72.65625
 
 
-	masterdata[0] = (inputData, 350)
+	masterdata[0] = (inputData, 200)
 	master.set(masterdata)
 
 	outputData = master.getBase()
 
+	# print str(outputData[0]) + "\n"
+
+	if outputData[0] < (inputData + 0.5) and outputData[0] > (inputData - 0.5):
+		print "entrou"
+
 	LOGID = 0
 	tNow = time.time().real - comecou
-	
 
 	tempo.append(tNow)
 	qInput.append(inputData)

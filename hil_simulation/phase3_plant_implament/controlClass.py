@@ -6,7 +6,7 @@
 import time
 
 # Ignorando erro com uma margem de erro
-MARGIN = .5
+MARGIN = .8
 # Valores maximos e minimos de posicoes possiveis (inerentes ao servo)
 MAXP = 299.9 #1023
 MINP = 0.1 #0
@@ -18,12 +18,12 @@ class Controller:
 	#########################################################################
 	# construtor
 	#########################################################################
-	def __init__(self, KPgain, KIgain):
-		self.reference = 0.0
+	def __init__(self, KPgain, KIgain, u_kDelay, e_kDelay, ref):
+		self.reference = ref
 		self.Kp = KPgain
 		self.Ki = KIgain
-		self.u_k_delay = 0
-		self.e_k_delay = 0
+		self.u_k_delay = u_kDelay
+		self.e_k_delay = e_kDelay
 		self.torque_limit = 0
 	
 	#########################################################################
@@ -50,7 +50,7 @@ class Controller:
 		# Controle de posicao
 		u_k = self.u_k_delay + self.Kp*e_k + self.Ki*self.e_k_delay
 
-		if y_k == (r_k + MARGIN) or y_k == (r_k - MARGIN):
+		if y_k <= (r_k + MARGIN) and y_k >= (r_k - MARGIN):
 			torque = 0
 			
 		return u_k, e_k, torque
