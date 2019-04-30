@@ -48,7 +48,7 @@ class Controller:
 		torque = min((torque, MAX_TORQUE))
 
 		# Controle de posicao
-		u_k = self.u_k_delay + self.Kp*e_k - self.Ki*self.e_k_delay
+		u_k = self.u_k_delay + self.Kp*e_k + self.Ki*self.e_k_delay
 
 		if y_k == (r_k + MARGIN) or y_k == (r_k - MARGIN):
 			torque = 0

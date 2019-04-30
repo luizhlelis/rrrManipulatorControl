@@ -23,6 +23,8 @@ master = cc.Crustcrawler(MASTER_PORT, True)
 # esperando robos irem para a posicao inicial
 
 inputFile_base = open('data/output_base.txt', 'w')
+inputFile_shoulder = open('data/output_shoulder.txt', 'w')
+inputFile_forearm = open('data/output_forearm.txt', 'w')
 
 outputFile_base = open('data/output_base.txt', 'w')
 outputFile_shoulder = open('data/output_shoulder.txt', 'w')
@@ -45,7 +47,13 @@ inputData_forearm = 32
 
 masterdata = master.get()
 
-master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
+# teste cond inicial
+inputData_forearm = master.getForearm()[0]
+print "inputData_forearm" + "\n"
+print str(inputData_forearm)
+
+# master.initialize(inputData_base, inputData_shoulder, inputData_forearm)
+# time.sleep(5)
 
 ############################################################
 # main loop
@@ -57,33 +65,37 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	if time.time() - comecou <= 10.0:
 		inputData_base = 290
 		inputData_shoulder = 40
-		inputData_forearm = 32
+		# inputData_forearm = 32
 	else:
 		inputData_base = 200
 		inputData_shoulder = 80
 		inputData_forearm = 100
 
 
-	masterdata[0] = (inputData_base, 350)
+	# masterdata[0] = (inputData_base, 350)
 	# masterdata[1] = (inputData_shoulder, 350)
-	# masterdata[2] = (inputData_forearm, 350)
+	masterdata[2] = (inputData_forearm, 350)
 
 	master.set(masterdata)
 
 	# outputData = master.get()
-	outputData = master.getBase()
+	outputData = master.getForearm()
 
 	tNow = time.time().real - comecou
 	x_axis_List.append(tNow)
 
 	# print 'idx-> '+ str(tNow) + '\n'
 
-	qInput_base.append(inputData_base)
+	# qInput_base.append(inputData_base)
 	# qInput_shoulder.append(inputData_shoulder)
-	# qInput_forearm.append(inputData_forearm)
+	qInput_forearm.append(inputData_forearm)
 
-	aux1 = outputData
-	qOutput_base.append(aux1[0])
+	# aux1 = outputData
+	# qOutput_base.append(aux1[0])
+	# aux2 = outputData
+	# qOutput_shoulder.append(aux2[0])
+	aux3 = outputData
+	qOutput_forearm.append(aux3[0])
 
 	# aux1 = outputData[0]
 	# qOutput_base.append(aux1)
@@ -92,38 +104,39 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	# aux3 = outputData[2]
 	# qOutput_forearm.append(aux3)
 
-	# outputFile_base.write(str(tNow) + ',' + str(aux1[0]) + '\n')
-	outputFile_base.write(str(aux1) + '\n')
-	inputFile_base.write(str(aux1) + '\n')
-	# outputFile_shoulder.write(str(tNow) + ',' + str(aux2) + '\n')
-	# outputFile_forearm.write(str(tNow) + ',' + str(aux3) + '\n')
+	# outputFile_base.write(str(aux2) + '\n')
+	# inputFile_base.write(str(aux2) + '\n')
+	# outputFile_shoulder.write(str(aux2) + '\n')
+	# outputFile_shoulder.write(str(aux2) + '\n')
+	outputFile_forearm.write(str(aux3[0]) + '\n')
+	inputFile_forearm.write(str(inputData_forearm) + '\n')
 
 	time.sleep(.23)
 
 ############################################################
 # destruindo objetos
-outputFile_base.close()
+# outputFile_base.close()
 # outputFile_shoulder.close()
-# outputFile_forearm.close()
+outputFile_forearm.close()
 print "Destruindo objetos..."
 del master
 #del slave
 
 ############################################################
 # plota resultados
-plt.figure(1)
-plt.plot(x_axis_List, qInput_base, 'r.-', label='referencia')
-plt.plot(x_axis_List, qOutput_base, 'b.-', label='saida')
-plt.legend()
+# plt.figure(1)
+# plt.plot(x_axis_List, qInput_base, 'r.-', label='referencia')
+# plt.plot(x_axis_List, qOutput_base, 'b.-', label='saida')
+# plt.legend()
 
 # plt.figure(2)
 # plt.plot(x_axis_List, qInput_shoulder, 'r.-', label='referencia')
 # plt.plot(x_axis_List, qOutput_shoulder, 'b.-', label='saida')
 # plt.legend()
 
-# plt.figure(3)
-# plt.plot(x_axis_List, qInput_forearm, 'r.-', label='referencia')
-# plt.plot(x_axis_List, qOutput_forearm, 'b.-', label='saida')
-# plt.legend()
+plt.figure(3)
+plt.plot(x_axis_List, qInput_forearm, 'r.-', label='referencia')
+plt.plot(x_axis_List, qOutput_forearm, 'b.-', label='saida')
+plt.legend()
 
 plt.show()

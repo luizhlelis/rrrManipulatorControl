@@ -67,9 +67,9 @@ TORQUE_CONV_RATIO   = A12_MAX_TORQUE/A12_MAX_TORQUEBIN
 KPGAIN_BASE = 0.413
 KPGAIN_SHOULDER = 0.1572
 KPGAIN_FOREARM = 0.413
-KIGAIN_BASE = 0.2008
+KIGAIN_BASE = -0.2008
 KIGAIN_SHOULDER = 0.06513
-KIGAIN_FOREARM = 0.2008
+KIGAIN_FOREARM = -0.2008
 
 
 KPGAIN_TORQUE = 8.0
@@ -132,6 +132,7 @@ class Crustcrawler:
 		self.ForearmCtrl = ctrl.Controller(KPGAIN_FOREARM, KIGAIN_FOREARM)
 
 		self.outputFile_base = open('data/controlAction_base.txt', 'w')
+		self.outputFile_shoulder = open('data/controlAction_shoulder.txt', 'w')
 		
 		#########################################################################
 		# variaveis de entrada e saida
@@ -171,6 +172,7 @@ class Crustcrawler:
 		
 		# setando condicoes iniciais
 		self.initJoints()
+		# self.initialize(290, 40, 32)
 		
 		# torques gravitacionais
 		self.Gq_shoulder = 0.0
@@ -213,14 +215,14 @@ class Crustcrawler:
 	#########################################################################
 	def initJoints(self):
 		# pega valores medios das juntas
-		med_base = self.getBase()[0]
-		med_shoulder = self.getShoulder()[0]
-		med_forearm = self.getForearm()[0]
+		# med_base = self.getBase()[0]
+		# med_shoulder = self.getShoulder()[0]
+		# med_forearm = self.getForearm()[0]
 
-		print 'inicializou-> ' + str(med_base) + '\n'
+		print 'inicializou-> 290, 40, 32 \n'
 
 		# seta referencia de controle para o meio
-		self.set([(290, 0), (med_shoulder, 0), (med_forearm, 0)])
+		self.set([(290, 0), (40, 0), (32, 0)])
 	
 	#########################################################################
 	# le as informacoes de todas as juntas
@@ -252,9 +254,9 @@ class Crustcrawler:
 			self.torque_grav()
 			
 			# seta a referencia de cada junta separadamente
-			self.setBase(self.ref[0][0])
-			# self.setShoulderOpenLoop(self.ref[1][0])
-			# self.setForearmOpenLoop(self.ref[2][0])
+			# self.setBase(self.ref[0][0])
+			# self.setShoulder(self.ref[1][0])
+			self.setForearm(self.ref[2][0])
 		
 			# escreve todo mundo
 			self.mutex.acquire()
@@ -266,6 +268,7 @@ class Crustcrawler:
 
 			idx+=1
 		self.outputFile_base.close()
+		self.outputFile_shoulder.close()
 
 	#########################################################################
 	# condicoes iniciais
@@ -274,8 +277,8 @@ class Crustcrawler:
 
 		# seta a referencia de cada junta separadamente
 		self.setBaseOpenLoop(angle_base)
-		# self.setShoulderOpenLoop(angle_shoulder)
-		# self.setForearmOpenLoop(angle_forearm)
+		self.setShoulderOpenLoop(angle_shoulder)
+		self.setForearmOpenLoop(angle_forearm)
 				
 	#########################################################################
 	# read position and speed from all servos in the robot
@@ -391,11 +394,12 @@ class Crustcrawler:
 		angle, speed = self.getShoulder()
 		
 		# pega a acao de controle
-		self.u_k_shoulder, self.e_k_shoulder = self.ShoulderCtrl.get_U_k(angle)
+		self.u_k_shoulder, self.e_k_shoulder, torque = self.ShoulderCtrl.get_U_k(angle, self.ref[1][1])
+		self.outputFile_shoulder.write(str(self.u_k_shoulder) + ',' + str(self.e_k_shoulder) + '\n')
 		
 		# seta posicao do servo do ombro
-		self.setJoint(SHOULDER_A_AXIS_ID, self.u_k_shoulder, self.ref[1][1])
-		self.setJoint(SHOULDER_B_AXIS_ID, self.u_k_shoulder, self.ref[1][1])
+		self.setJoint(SHOULDER_A_AXIS_ID, self.u_k_shoulder, torque)
+		self.setJoint(SHOULDER_B_AXIS_ID, self.u_k_shoulder, torque)
 
 	def setShoulderOpenLoop(self, angle_ref):
 
@@ -434,11 +438,11 @@ class Crustcrawler:
 		angle, speed = self.getForearm()
 		
 		# pega a acao de controle
-		self.u_k_forearm, self.e_k_forearm = self.ForearmCtrl.get_U_k(angle)
+		self.u_k_forearm, self.e_k_forearm, torque = self.ForearmCtrl.get_U_k(angle, self.ref[2][1])
 		
 		# seta posicao do servo do antebraco
-		self.setJoint(FOREARM_A_AXIS_ID, self.u_k_forearm, self.ref[2][1])
-		self.setJoint(FOREARM_B_AXIS_ID, self.u_k_forearm, self.ref[2][1])
+		self.setJoint(FOREARM_A_AXIS_ID, self.u_k_forearm, torque)
+		self.setJoint(FOREARM_B_AXIS_ID, self.u_k_forearm, torque)
 
 	def setForearmOpenLoop(self, angle_ref):
 		

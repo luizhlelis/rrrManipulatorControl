@@ -35,7 +35,6 @@ end
 resultStepBase0_01 = lsim(tfBase0_01,inputBase0_01,timeBase0_01);
 
 resultStepBase0_23 = lsim(tfBase0_23,refBase0_23_estab,timeBase0_23_estab);
-resultStepBase0_23_c2d = lsim(tfBase0_23_c2d,refBase0_23_estab,timeBase0_23_estab);
 resultStepBase0_23_segOrdem = lsim(tfBase0_23_segOrdem,refBase0_23_estab,timeBase0_23_estab);
 
 figure(1)
@@ -54,8 +53,6 @@ hold on
 stairs(timeBase0_23(1,:),outputBase0_23(:,1),'r', 'LineWidth', 1.5);
 hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
-hold on
-stairs(timeBase0_23(1,:),resultStepBase0_23_c2d(101:187,1),'Color',darknessGreen, 'LineWidth', 1.5);
 hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23_segOrdem(101:187,1),'g', 'LineWidth', 1.5);
 axis([5 18 180 300])

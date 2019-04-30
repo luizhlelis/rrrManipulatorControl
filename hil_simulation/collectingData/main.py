@@ -47,6 +47,7 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 	else:
 		inputData = 200
 
+
 	masterdata[0] = (inputData, 350)
 	master.set(masterdata)
 
@@ -63,7 +64,7 @@ while time.time() - comecou <= 20.0: # tempo de simulacao
 
 	outputFile.write(str(tNow) + ',' + str(a) + '\n')
 
-	time.sleep(.0001)
+	time.sleep(.23)
 
 ############################################################
 # destruindo objetos

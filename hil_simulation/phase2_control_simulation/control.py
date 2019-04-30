@@ -43,10 +43,10 @@ print "---------------------------------\nControl begin..."
 
 idx = 0
 
-while idx <= 2000: # tempo de simulacao
+while idx <= 87: # tempo de simulacao
 
 	# Construindo a referencia r(k)
-	if idx <= 1000:
+	if idx <= 45:
 		r_k = [290, 40, 32]
 	else:
 		r_k = [200, 80, 100]
@@ -74,13 +74,13 @@ while idx <= 2000: # tempo de simulacao
 	e_k[2] = r_k[2] - y_k[2]
 
 	# BASE - Funcao de transferência do controlador
-	u_k[0] = u_k_delay[0] + 3.762*e_k[0] - 3.728*e_k_delay[0]
+	u_k[0] = u_k_delay[0] + 0.413*e_k[0] - 0.2008*e_k_delay[0]
 
 	# SHOULDER - Funcao de transferência do controlador
-	u_k[1] = u_k_delay[1] + 2.244*e_k[1] - 2.212*e_k_delay[1]
+	u_k[1] = u_k_delay[1] + 0.1572*e_k[1] + 0.06513*e_k_delay[1]
 
 	# FOREARM - Funcao de transferência do controlador
-	u_k[2] = u_k_delay[2] + 3.74*e_k[2] - 3.706*e_k_delay[2]
+	u_k[2] = u_k_delay[2] + 0.413*e_k[2] - 0.2008*e_k_delay[2]
 
 	# Pegando os valores da iteracao anterior
 	e_k_delay = e_k
