@@ -29,6 +29,7 @@ inputFile_forearm = open('data/step/input_forearm.txt', 'w')
 outputFile_base = open('data/step/output_base.txt', 'w')
 outputFile_shoulder = open('data/step/output_shoulder.txt', 'w')
 outputFile_forearm = open('data/step/output_forearm.txt', 'w')
+
 time.sleep(3)
 
 # variaveis de plot
