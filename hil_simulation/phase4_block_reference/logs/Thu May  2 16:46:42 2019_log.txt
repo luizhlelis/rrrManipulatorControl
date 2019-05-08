@@ -1,0 +1,10 @@
+%Data: Thu May  2 16:46:42 2019
+%Control gains - BASE:
+%	(KP, KI): (0.152,0.032)
+
+%Control gains - SHOULDER:
+%	(KP, KI): (0.1572,0.06513)
+
+%Control gains - FOREARM:
+%	(KP, KI): (0.152,0.032)
+
