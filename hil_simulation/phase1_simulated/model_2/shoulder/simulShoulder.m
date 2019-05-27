@@ -41,7 +41,7 @@ hold on
 stairs(timeShoulder0_23(1,:),resultStepShoulder0_23_segOrdem(101:187,1),'g', 'LineWidth', 1.5);
 axis([5 18 35 85])
 legend('degrau','real','simulado', 'simulado segOrdem')
-title('Simulacao Shoulder Manipulador Ts = 0.23s')
+title('Simulacao Shoulder Manipulador T = 0.23s')
 
 figure(2)
 stairs(timeShoulder0_23(1,:),inputShoulder0_23(:,1),'b', 'LineWidth', 1.5);
@@ -51,7 +51,7 @@ hold on
 stairs(timeShoulder0_23(1,:),resultStepShoulder0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 35 85])
 legend('degrau','real','simulado')
-title('Simulacao Shoulder Manipulador Ts = 0.23s')
+title('Simulacao Shoulder Manipulador T = 0.23s')
 
 % ---------------------------- Malha Fechada -------------------------
 

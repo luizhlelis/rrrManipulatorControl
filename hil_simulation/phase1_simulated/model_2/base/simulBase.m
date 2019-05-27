@@ -45,7 +45,7 @@ hold on
 stairs(timeBase0_01(1,:),resultStepBase0_01,'Color',[0,.5,0], 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado')
-title('Simulacao Base Manipulador Ts = 0.01s')
+title('Simulacao Base Manipulador T = 0.01s')
 
 figure(2)
 stairs(timeBase0_23(1,:),inputBase0_23(:,1),'b', 'LineWidth', 1.5);
@@ -57,7 +57,7 @@ hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23_segOrdem(101:187,1),'g', 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado', 'simulado segOrdem')
-title('Simulacao Base Manipulador Ts = 0.23s')
+title('Simulacao Base Manipulador T = 0.23s')
 
 figure(3)
 stairs(timeBase0_23(1,:),inputBase0_23(:,1),'b', 'LineWidth', 1.5);
@@ -67,7 +67,7 @@ hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado')
-title('Simulacao Base Manipulador Ts = 0.23s')
+title('Simulacao Base Manipulador T = 0.23s')
 
 % ---------------------------- Malha Fechada -------------------------
 

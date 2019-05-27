@@ -40,7 +40,7 @@ hold on
 stairs(timeForearm0_23(1,:),resultStepForearm0_23_segOrdem(101:187,1),'g', 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','real','simulado', 'simulado segOrdem')
-title('Simulacao Forearm Manipulador Ts = 0.23s')
+title('Simulacao Forearm Manipulador T = 0.23s')
 
 figure(2)
 stairs(timeForearm0_23(1,:),inputForearm0_23(:,1),'b', 'LineWidth', 1.5);
@@ -50,7 +50,7 @@ hold on
 stairs(timeForearm0_23(1,:),resultStepForearm0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','real','simulado')
-title('Simulacao Forearm Manipulador Ts = 0.23s')
+title('Simulacao Forearm Manipulador T = 0.23s')
 
 
 % ----------------------------- MALHA FECHADA ----------------------------
