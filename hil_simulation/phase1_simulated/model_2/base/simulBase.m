@@ -67,7 +67,7 @@ hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado')
-title('Simulacao Base Manipulador T = 0.23s')
+%title('Simulacao Base Manipulador T = 0.23s')
 
 % ---------------------------- Malha Fechada -------------------------
 
@@ -99,4 +99,4 @@ hold on
 stairs(timeBase0_23(1,:),result_mf_step_base(101:187,1),'b','Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado')
-title('Simulacao MF Base Manipulador')
+%title('Simulacao MF Base Manipulador')

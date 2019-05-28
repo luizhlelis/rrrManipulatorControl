@@ -50,7 +50,7 @@ hold on
 stairs(timeForearm0_23(1,:),resultStepForearm0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','real','simulado')
-title('Simulacao Forearm Manipulador T = 0.23s')
+%title('Simulacao Forearm Manipulador T = 0.23s')
 
 
 % ----------------------------- MALHA FECHADA ----------------------------
@@ -67,7 +67,7 @@ title('Simulacao Forearm Manipulador T = 0.23s')
 
 % c_pi = tf([3.74 3.4],[1 0])
 % c_pi = c2d(c_pi,0.23,'zoh')
-c_pi = tf([0.41305 -0.200783605],[1 -1],0.23)
+c_pi = tf([0.13 0.032],[1 -1],0.23)
 mf_forearm = feedback(c_pi*tfForearm0_23_segOrdem,1)
 
 result_mf_step_forearm = lsim(mf_forearm,refForearm0_23_estab,timeForearm0_23_estab);
