@@ -46,8 +46,8 @@ y_k_Output_Forearm	= list()
 u_k = list()
 y_k_delay = [290, 40, 32]
 y_k_delay_2 = [290, 40, 32]
-u_k_delay = [0, 0, 0]
-u_k_delay_2 = [0, 0, 0]
+u_k_delay = [290, 40, 32]
+u_k_delay_2 = [290, 40, 32]
 
 # Condicaoes Iniciais [base, shoulder, forearm]
 r_k = [290, 40, 32]
