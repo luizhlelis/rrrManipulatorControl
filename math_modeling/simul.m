@@ -16,14 +16,14 @@ dh = [
     0,  0,      0.172,  0;
     0,  0,      0.235,  0];
 
-dh_representation = SerialLink(dh)
+dh_representation = SerialLink(dh, 'name', ' ')
 
 % Carregando angulos iniciais das juntas (radianos)
 q = [0, 0, 0, 0]
 
 % Representacao grafica do manipulador
-%dh_representation.plot(q)
-%dh_representation.teach
+dh_representation.plot(q, 'xyz')
+dh_representation.teach
 
 % 1.2) Matrizes homogeneas
 
@@ -304,6 +304,6 @@ c_333 = .5*(del_d33_theta3 + del_d31_theta3 - del_d13_theta3);
 
 % --------------------------- Energia Potencial ---------------------
 
-phi_1 = 0;
-phi_2 = m_2*g*L_2*cos(theta2);
-phi_3 = m_3*g*L_3*cos(theta2 + theta3);
+% phi_1 = 0;
+% phi_2 = m_2*g*L_2*cos(theta2);
+% phi_3 = m_3*g*L_3*cos(theta2 + theta3);
