@@ -61,13 +61,9 @@ for idx = 1:87
     e_k_shoulder = r_k_shoulder - y_k_shoulder;
     e_k_forearm = r_k_forearm - y_k_forearm;
     
-%     u_k_base = u_k_base_delay + 0.413*e_k_base - 0.1508*e_k_base_delay;
-%     u_k_shoulder = u_k_shoulder_delay + 0.1572*e_k_shoulder + 0.06513*e_k_shoulder_delay;
-%     u_k_forearm = u_k_forearm_delay + 0.413*e_k_forearm - 0.1508*e_k_forearm_delay;
-    
     % Sem sem zero nao minimo
     u_k_base = u_k_base_delay + 0.152*e_k_base + 0.032*e_k_base_delay;
-    u_k_shoulder = u_k_shoulder_delay + 0.152*e_k_shoulder + 0.032*e_k_shoulder_delay;
+    u_k_shoulder = u_k_shoulder_delay + 0.1572*e_k_shoulder + 0.06513*e_k_shoulder_delay;
     u_k_forearm = u_k_forearm_delay + 0.152*e_k_forearm + 0.032*e_k_forearm_delay;
       
     y_k_base = 0.8273*u_k_base_delay - 0.6543*u_k_base_delay_2 + 0.9515*y_k_base_delay - 0.1245*y_k_base_delay_2;
