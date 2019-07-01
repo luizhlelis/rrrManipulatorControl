@@ -32,6 +32,8 @@ hold on
 stairs(timeForearm0_23(1,:),outputBase0_23(:,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','resposta')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 
 figure(2)
 stairs(timeForearm0_23(1,:),refShoulder0_23(1,:),'b', 'LineWidth', 1.5);
@@ -39,6 +41,8 @@ hold on
 stairs(timeForearm0_23(1,:),outputShoulder0_23(:,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 35 85])
 legend('degrau','resposta')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 
 figure(3)
 stairs(timeForearm0_23(1,:),refForearm0_23(1,:),'b', 'LineWidth', 1.5);
@@ -46,4 +50,6 @@ hold on
 stairs(timeForearm0_23(1,:),outputForearm0_23(:,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','resposta')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 

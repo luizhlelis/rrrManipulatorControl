@@ -50,6 +50,8 @@ hold on
 stairs(timeForearm0_23(1,:),resultStepForearm0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','real','simulado')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 %title('Simulacao Forearm Manipulador T = 0.23s')
 
 
@@ -80,4 +82,6 @@ hold on
 stairs(timeForearm0_23(1,:),result_mf_step_forearm(101:187,1),'b','Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 20 115])
 legend('degrau','real','simulado')
-title('Simulacao MF Forearm Manipulador')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
+% title('Simulacao MF Forearm Manipulador')

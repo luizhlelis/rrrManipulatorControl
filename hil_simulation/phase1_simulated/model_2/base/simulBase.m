@@ -66,7 +66,9 @@ stairs(timeBase0_23(1,:),outputBase0_23(:,1),'r', 'LineWidth', 1.5);
 hold on
 stairs(timeBase0_23(1,:),resultStepBase0_23_segOrdem(101:187,1),'Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
-legend('degrau','real','simulado')
+legend('degrau','real', 'simulado')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 %title('Simulacao Base Manipulador T = 0.23s')
 
 % ---------------------------- Malha Fechada -------------------------
@@ -99,4 +101,6 @@ hold on
 stairs(timeBase0_23(1,:),result_mf_step_base(101:187,1),'b','Color',darkGreen, 'LineWidth', 1.5);
 axis([5 18 180 300])
 legend('degrau','real','simulado')
+xlabel('t (s)')
+ylabel('Ângulo do servomotor (º)')
 %title('Simulacao MF Base Manipulador')
